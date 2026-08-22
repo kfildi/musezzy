@@ -22,6 +22,8 @@
             --input-bg: #f0f2f5;
             --hover-bg: #f8faff;
             --active-bg: #e0e7ff;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
         }
 
         body.theme-blue { --accent: #4f46e5; --accent-hover: #4338ca; --bubble-out: #e0e7ff; --avatar-bg: linear-gradient(135deg, #4f46e5, #7c3aed); --active-bg: #e0e7ff; }
@@ -109,6 +111,8 @@
         .chat-info { flex: 1; min-width: 0; }
         .chat-name { font-weight: 600; font-size: 15px; }
         .chat-last { color: var(--text-secondary); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .chat-delete { background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 16px; padding: 4px 8px; border-radius: 8px; transition: 0.2s; }
+        .chat-delete:hover { background: var(--danger); color: white; }
 
         /* ЧАТ */
         .chat-area { flex: 1; display: flex; flex-direction: column; background: var(--bg); height: 100vh; transition: background 0.3s; }
@@ -158,6 +162,8 @@
         .btn-primary { background: var(--accent); color: white; }
         .btn-primary:hover { background: var(--accent-hover); }
         .btn-secondary { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-danger:hover { background: var(--danger-hover); }
 
         .avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin: 0 auto 16px; display: block; }
         .join-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--accent); color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 12px; }
@@ -430,8 +436,10 @@
 <div class="modal-overlay hidden" id="modalFindUser">
     <div class="modal">
         <h3>Найти пользователя</h3>
-        <input type="text" id="findUserInput" placeholder="Введите юзернейм (без @)" onkeydown="if(event.key==='Enter') findUser()">
-        <button class="btn-primary" onclick="findUser()" style="width:100%;padding:12px;border:none;border-radius:12px;cursor:pointer;font-weight:600;">Найти</button>
+        <div style="display:flex;gap:8px;">
+            <input type="text" id="findUserInput" placeholder="Введите юзернейм (без @)" style="flex:1;" onkeydown="if(event.key==='Enter') findUser()">
+            <button class="btn-primary" onclick="findUser()" style="padding:12px 20px;border:none;border-radius:12px;cursor:pointer;font-weight:600;">Найти</button>
+        </div>
         <div id="findResult" style="margin-top:12px;font-size:14px;"></div>
         <div class="modal-actions">
             <button class="btn-secondary" onclick="closeModal('modalFindUser')">Закрыть</button>
@@ -451,6 +459,9 @@
         </div>
         <div id="infoJoinSection" style="display:none;">
             <button class="join-btn" id="joinBtn" onclick="joinGroup()">Вступить в группу</button>
+        </div>
+        <div id="infoDeleteSection" style="display:none;margin-top:12px;">
+            <button class="btn-danger" onclick="deleteGroup()" style="width:100%;padding:12px;border:none;border-radius:12px;cursor:pointer;font-weight:600;">🗑️ Удалить группу</button>
         </div>
         <div class="modal-actions">
             <button class="btn-secondary" onclick="closeModal('modalChatInfo')">Закрыть</button>
@@ -530,12 +541,10 @@ function applyTheme() {
     const theme = getTheme();
     const isDark = getDarkMode();
     
-    // Убираем все классы тем
     document.body.className = '';
     document.body.classList.add('theme-' + theme);
     if (isDark) document.body.classList.add('dark');
     
-    // Обновляем активную тему
     document.querySelectorAll('.theme-option').forEach(el => {
         el.classList.toggle('active', el.dataset.theme === theme);
     });
@@ -760,14 +769,13 @@ function renderChatList() {
     list.innerHTML = '';
     const data = getData();
     
-    // Группы
-    const groups = data.groups || [];
-    // Личные чаты
+    // Только группы, где пользователь участник
+    const groups = (data.groups || []).filter(g => g.members && g.members.includes(currentUser.id));
     const privateChats = data.private_chats || {};
     
     let allChats = [];
 
-    // Добавляем группы
+    // Добавляем группы (только свои)
     groups.forEach(g => {
         allChats.push({ type: 'group', ...g });
     });
@@ -776,7 +784,6 @@ function renderChatList() {
     if (currentUser) {
         Object.keys(privateChats).forEach(chatId => {
             const chat = privateChats[chatId];
-            // Проверяем, что это чат текущего пользователя
             if (chat.participants && chat.participants.includes(currentUser.id)) {
                 const otherId = chat.participants.find(id => id !== currentUser.id);
                 const otherUser = data.users.find(u => u.id === otherId);
@@ -794,7 +801,8 @@ function renderChatList() {
                         }),
                         messages: chat.messages || [],
                         isPrivate: true,
-                        otherUserId: otherId
+                        otherUserId: otherId,
+                        privateId: chatId
                     });
                 }
             }
@@ -805,13 +813,6 @@ function renderChatList() {
         list.innerHTML = '<div style="text-align:center;color:var(--text-secondary);padding:40px 20px;font-size:14px;">Нет чатов<br>Создайте группу или найдите пользователя</div>';
         return;
     }
-
-    // Сортируем по времени последнего сообщения
-    allChats.sort((a, b) => {
-        const aMsg = a.messages && a.messages.length > 0 ? new Date(a.messages[a.messages.length-1].timestamp || 0) : 0;
-        const bMsg = b.messages && b.messages.length > 0 ? new Date(b.messages[b.messages.length-1].timestamp || 0) : 0;
-        return bMsg - aMsg;
-    });
 
     allChats.forEach(chat => {
         const item = document.createElement('div');
@@ -825,12 +826,19 @@ function renderChatList() {
         const lastMsg = msgs.length > 0 ? msgs[msgs.length-1].text : 'Нет сообщений';
         const isPrivate = chat.type === 'private';
 
+        // Кнопка удаления только для групп и только для владельца
+        let deleteBtn = '';
+        if (chat.type === 'group' && chat.owner === currentUser.id) {
+            deleteBtn = `<button class="chat-delete" onclick="event.stopPropagation(); deleteGroupById('${chat.id}')">✕</button>`;
+        }
+
         item.innerHTML = `
             <div class="avatar">${avatarContent}</div>
             <div class="chat-info">
                 <div class="chat-name">${chat.name} ${isPrivate ? '🔒' : ''}</div>
                 <div class="chat-last">${lastMsg}</div>
             </div>
+            ${deleteBtn}
         `;
         list.appendChild(item);
     });
@@ -843,7 +851,6 @@ function openChat(chatId, type) {
     let isPrivate = false;
     
     if (type === 'private') {
-        // Ищем в private_chats
         const realId = chatId.replace('private_', '');
         const privateChat = data.private_chats[realId];
         if (privateChat) {
@@ -863,9 +870,8 @@ function openChat(chatId, type) {
             }
         }
     } else {
-        // Группа
         const group = data.groups.find(g => g.id === chatId);
-        if (group) {
+        if (group && group.members && group.members.includes(currentUser.id)) {
             chat = {
                 id: group.id,
                 name: group.name,
@@ -873,7 +879,8 @@ function openChat(chatId, type) {
                 messages: data.messages[group.id] || [],
                 members: group.members,
                 memberNames: group.memberNames,
-                isPrivate: false
+                isPrivate: false,
+                isOwner: group.owner === currentUser.id
             };
         }
     }
@@ -956,7 +963,6 @@ function sendMessage() {
     const isPrivate = activeChatId.startsWith('private_');
     
     if (isPrivate) {
-        // Личный чат
         const realId = activeChatId.replace('private_', '');
         if (!data.private_chats[realId]) {
             data.private_chats[realId] = { participants: [], messages: [] };
@@ -973,7 +979,6 @@ function sendMessage() {
         });
         saveData(data);
         
-        // Обновляем отображение
         const chat = {
             id: activeChatId,
             messages: data.private_chats[realId].messages,
@@ -981,7 +986,6 @@ function sendMessage() {
         };
         renderMessages(chat);
     } else {
-        // Группа
         if (!data.messages[activeChatId]) data.messages[activeChatId] = [];
         data.messages[activeChatId].push({
             from: currentUser.id,
@@ -1070,6 +1074,36 @@ function createGroup() {
     openChat(newGroup.id, 'group');
 }
 
+function deleteGroupById(groupId) {
+    if (!confirm('Удалить группу? Это действие необратимо!')) return;
+    
+    const data = getData();
+    const group = data.groups.find(g => g.id === groupId);
+    if (!group) return;
+    
+    if (group.owner !== currentUser.id) {
+        alert('Только владелец может удалить группу');
+        return;
+    }
+    
+    data.groups = data.groups.filter(g => g.id !== groupId);
+    delete data.messages[groupId];
+    saveData(data);
+    
+    if (activeChatId === groupId) {
+        closeChat();
+    }
+    renderChatList();
+    alert('✅ Группа удалена');
+}
+
+function deleteGroup() {
+    if (currentChatInfo) {
+        deleteGroupById(currentChatInfo.id);
+        closeModal('modalChatInfo');
+    }
+}
+
 // ============================================================
 // 11. ПОИСК ПОЛЬЗОВАТЕЛЯ И ЛИЧНЫЕ СООБЩЕНИЯ
 // ============================================================
@@ -1138,7 +1172,6 @@ function openPrivateChat(userId) {
     const user = data.users.find(u => u.id === userId);
     if (!user) return;
     
-    // Проверяем, есть ли уже личный чат
     let chatId = null;
     if (!data.private_chats) data.private_chats = {};
     
@@ -1152,7 +1185,6 @@ function openPrivateChat(userId) {
     }
     
     if (!chatId) {
-        // Создаём новый личный чат
         chatId = 'pc_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
         data.private_chats[chatId] = {
             participants: [currentUser.id, userId],
@@ -1167,18 +1199,6 @@ function openPrivateChat(userId) {
     openChat('private_' + chatId, 'private');
 }
 
-function getPrivateChatId(userId) {
-    const data = getData();
-    for (const [id, chat] of Object.entries(data.private_chats || {})) {
-        if (chat.participants && 
-            chat.participants.includes(currentUser.id) && 
-            chat.participants.includes(userId)) {
-            return id;
-        }
-    }
-    return null;
-}
-
 // ============================================================
 // 12. ИНФО О ГРУППЕ
 // ============================================================
@@ -1189,7 +1209,6 @@ function openChatInfo() {
     const isPrivate = activeChatId.startsWith('private_');
     
     if (isPrivate) {
-        // Личный чат — показываем инфо о пользователе
         const realId = activeChatId.replace('private_', '');
         const privateChat = data.private_chats[realId];
         if (privateChat) {
@@ -1201,6 +1220,7 @@ function openChatInfo() {
                 document.getElementById('infoMembers').innerHTML = '<b>Собеседник:</b> @' + otherUser.username;
                 document.getElementById('infoLink').textContent = '@' + otherUser.username;
                 document.getElementById('infoJoinSection').style.display = 'none';
+                document.getElementById('infoDeleteSection').style.display = 'none';
                 document.getElementById('modalChatInfo').classList.remove('hidden');
                 return;
             }
@@ -1208,7 +1228,6 @@ function openChatInfo() {
         return;
     }
     
-    // Группа
     const group = data.groups.find(g => g.id === activeChatId);
     if (!group) return;
     currentChatInfo = group;
@@ -1220,10 +1239,12 @@ function openChatInfo() {
 
     const joinSection = document.getElementById('infoJoinSection');
     const joinBtn = document.getElementById('joinBtn');
+    const deleteSection = document.getElementById('infoDeleteSection');
 
     const isMember = group.members && group.members.includes(currentUser.id);
     const isOwner = group.owner === currentUser.id;
 
+    // Кнопка вступления
     if (!isMember && !isOwner) {
         joinSection.style.display = 'block';
         joinBtn.textContent = 'Вступить в группу';
@@ -1236,6 +1257,13 @@ function openChatInfo() {
         joinBtn.disabled = true;
     } else {
         joinSection.style.display = 'none';
+    }
+
+    // Кнопка удаления (только для владельца)
+    if (isOwner) {
+        deleteSection.style.display = 'block';
+    } else {
+        deleteSection.style.display = 'none';
     }
 
     document.getElementById('modalChatInfo').classList.remove('hidden');
@@ -1300,6 +1328,7 @@ function saveProfile() {
         return;
     }
 
+    const oldUsername = currentUser.username;
     currentUser.name = name;
     currentUser.username = username;
 
