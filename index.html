@@ -36,10 +36,18 @@
             --hover-bg: #2a2a44;
             --active-bg: #3a2a5e;
         }
+        body.dark.theme-blue { --bubble-out: #1e3a5f; --active-bg: #1e3a5f; }
+        body.dark.theme-green { --bubble-out: #1a3a2a; --active-bg: #1a3a2a; }
+        body.dark.theme-red { --bubble-out: #3a1a1a; --active-bg: #3a1a1a; }
+        body.dark.theme-purple { --bubble-out: #2a1a4a; --active-bg: #2a1a4a; }
+        body.dark.theme-orange { --bubble-out: #3a2a1a; --active-bg: #3a2a1a; }
+        body.dark.theme-pink { --bubble-out: #3a1a2a; --active-bg: #3a1a2a; }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
         body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; transition: background 0.3s, color 0.3s; }
         .hidden { display: none !important; }
 
+        /* АВТОРИЗАЦИЯ */
         .auth-page {
             width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center;
             background: var(--bg); padding: 20px; transition: background 0.3s;
@@ -66,14 +74,13 @@
         .auth-error { color: #ef4444; font-size: 13px; margin-top: 8px; text-align: center; min-height: 20px; }
         .auth-success { color: #22c55e; font-size: 13px; margin-top: 8px; text-align: center; }
 
+        /* ПРИЛОЖЕНИЕ */
         .app { display: flex; width: 100%; height: 100vh; max-width: 1400px; background: var(--bg); overflow: hidden; transition: background 0.3s; }
         .sidebar { width: 360px; min-width: 300px; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; transition: background 0.3s; }
         .sidebar-header { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-        .profile-btn { display: flex; align-items: center; gap: 12px; cursor: pointer; flex: 1; text-decoration: none; color: var(--text); }
-        .avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--avatar-bg); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 18px; overflow: hidden; flex-shrink: 0; }
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .profile-name { font-weight: 600; font-size: 15px; }
-        .profile-username { color: var(--text-secondary); font-size: 13px; }
+        .sidebar-title { font-size: 20px; font-weight: 700; color: var(--text); }
+        .settings-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-secondary); padding: 4px 8px; border-radius: 8px; transition: 0.2s; }
+        .settings-btn:hover { background: var(--hover-bg); color: var(--accent); }
 
         .search-bar { padding: 12px 20px; border-bottom: 1px solid var(--border); }
         .search-bar input { width: 100%; padding: 10px 16px; border-radius: 24px; border: 1px solid var(--border); outline: none; font-size: 14px; background: var(--input-bg); color: var(--text); }
@@ -143,26 +150,200 @@
         .profile-actions { display: flex; gap: 10px; margin-top: 12px; }
         .profile-actions button { flex: 1; padding: 10px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; }
 
-        .settings-panel { position: absolute; top: 0; left: -380px; width: 360px; height: 100%; background: var(--card); border-right: 1px solid var(--border); z-index: 10; transition: 0.3s; display: flex; flex-direction: column; box-shadow: 2px 0 30px rgba(0,0,0,0.06); }
+        /* ===== НАСТРОЙКИ ===== */
+        .settings-panel {
+            position: absolute;
+            top: 0;
+            left: -380px;
+            width: 360px;
+            height: 100%;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            z-index: 10;
+            transition: 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 30px rgba(0,0,0,0.06);
+        }
         .settings-panel.open { left: 0; }
-        .settings-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .settings-header h3 { font-size: 20px; font-weight: 700; }
-        .settings-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-secondary); }
-        .settings-content { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; }
-        .settings-section { margin-bottom: 24px; }
-        .settings-section h4 { font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-        .logout-btn { width: 100%; padding: 12px; border-radius: 12px; border: 2px solid #ef4444; background: transparent; color: #ef4444; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; margin-top: auto; }
-        .logout-btn:hover { background: #ef4444; color: white; }
+        .settings-panel.secondary { left: -760px; }
+        .settings-panel.secondary.open { left: -380px; }
 
-        .theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .theme-option { padding: 10px; border-radius: 12px; border: 2px solid var(--border); cursor: pointer; text-align: center; transition: 0.3s; background: var(--input-bg); }
+        .settings-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .settings-header .back {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 4px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .settings-header .back:hover { background: var(--hover-bg); }
+        .settings-header h3 {
+            font-size: 18px;
+            font-weight: 700;
+            flex: 1;
+        }
+        .settings-close {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: 0.2s;
+        }
+        .settings-close:hover { background: var(--hover-bg); }
+
+        .settings-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Профиль в настройках (по центру) */
+        .settings-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0 16px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+        .settings-profile .avatar {
+            width: 72px;
+            height: 72px;
+            font-size: 28px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .settings-profile .avatar:hover { opacity: 0.8; transform: scale(1.02); }
+        .settings-profile .name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .settings-profile .username {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .settings-btn-item {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: none;
+            background: var(--input-bg);
+            color: var(--text);
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+            font-weight: 500;
+            transition: 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .settings-btn-item:hover { background: var(--hover-bg); color: var(--accent); }
+        .settings-btn-item .arrow { color: var(--text-secondary); font-size: 18px; }
+
+        .settings-logout {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 2px solid #ef4444;
+            background: transparent;
+            color: #ef4444;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: 0.2s;
+            margin-top: auto;
+        }
+        .settings-logout:hover { background: #ef4444; color: white; }
+
+        /* ===== АККАУНТ (внутреннее окно) ===== */
+        .account-info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-top: 8px;
+        }
+        .account-info .row {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            padding: 12px 16px;
+            background: var(--input-bg);
+            border-radius: 12px;
+        }
+        .account-info .row .label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .account-info .row .value {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        /* ===== ТЕМА ОФОРМЛЕНИЯ ===== */
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .theme-option {
+            padding: 12px 8px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
+            background: var(--input-bg);
+        }
         .theme-option:hover { border-color: var(--accent); }
         .theme-option.active { border-color: var(--accent); background: var(--active-bg); }
-        .theme-option .preview { width: 28px; height: 28px; border-radius: 50%; margin: 0 auto 4px; border: 1px solid var(--border); }
-        .theme-option span { font-size: 11px; color: var(--text); }
-        .copy-link { display: block; text-align: center; font-size: 13px; color: var(--accent); cursor: pointer; margin-top: 8px; }
-        .copy-link:hover { text-decoration: underline; }
+        .theme-option .preview {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin: 0 auto 4px;
+            border: 1px solid var(--border);
+        }
+        .theme-option span { font-size: 12px; color: var(--text); }
 
+        .theme-dark-toggle {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            color: var(--text);
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.2s;
+            margin-top: 12px;
+        }
+        .theme-dark-toggle:hover { border-color: var(--accent); background: var(--hover-bg); }
+
+        /* АДАПТИВ */
         @media (max-width: 768px) {
             .sidebar { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; transition: transform 0.3s; }
             .sidebar.hidden { transform: translateX(-100%); }
@@ -171,21 +352,24 @@
             .back-btn { display: block !important; }
             .settings-panel { width: 100%; left: -100%; }
             .settings-panel.open { left: 0; }
+            .settings-panel.secondary { left: -200%; }
+            .settings-panel.secondary.open { left: -100%; }
             .auth-card { padding: 24px; }
             .menu-btn { bottom: 16px; right: 16px; width: 48px; height: 48px; font-size: 22px; }
             .menu-overlay { width: 280px; }
-            .theme-options { grid-template-columns: repeat(2, 1fr); }
+            .theme-grid { grid-template-columns: repeat(3, 1fr); }
         }
         @media (max-width: 400px) {
             .auth-card { padding: 16px; }
             .modal { padding: 20px; }
             .sidebar { min-width: 100%; }
-            .theme-options { grid-template-columns: repeat(2, 1fr); }
+            .theme-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
 
+<!-- АВТОРИЗАЦИЯ -->
 <div id="authPage" class="auth-page">
     <div class="auth-card">
         <div class="auth-logo">💬</div>
@@ -222,17 +406,14 @@
     </div>
 </div>
 
+<!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
 <div id="app" class="app hidden">
+
+    <!-- САЙДБАР -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <a class="profile-btn" href="#" onclick="openEditProfile(); return false;">
-                <div class="avatar" id="myAvatar">A</div>
-                <div>
-                    <div class="profile-name" id="myName">Мой профиль</div>
-                    <div class="profile-username" id="myUsername">@username</div>
-                </div>
-            </a>
-            <button onclick="toggleSettings()" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-secondary);">⚙️</button>
+            <span class="sidebar-title">musezzy</span>
+            <button class="settings-btn" onclick="openSettings()">⚙️</button>
         </div>
 
         <div class="search-bar">
@@ -242,6 +423,7 @@
         <div class="chat-list" id="chatList"></div>
     </div>
 
+    <!-- ЧАТ -->
     <div class="chat-area" id="chatArea">
         <div class="chat-header" id="chatHeader">
             <button class="back-btn" onclick="closeChat()">←</button>
@@ -258,57 +440,111 @@
         </div>
     </div>
 
+    <!-- ===== НАСТРОЙКИ (главное окно) ===== -->
     <div class="settings-panel" id="settingsPanel">
         <div class="settings-header">
             <h3>Настройки</h3>
-            <button class="settings-close" onclick="toggleSettings()">✕</button>
+            <button class="settings-close" onclick="closeSettings()">✕</button>
         </div>
         <div class="settings-content">
-            <div class="settings-section">
-                <h4>Аккаунт</h4>
-                <a class="profile-btn" href="#" onclick="openEditProfile(); return false;" style="cursor:pointer;text-decoration:none;color:var(--text);">
-                    <div class="avatar" id="settingsAvatar">A</div>
-                    <div>
-                        <div class="profile-name" id="settingsName">Мой профиль</div>
-                        <div class="profile-username" id="settingsUsername">@username</div>
-                    </div>
-                </a>
-                <div style="margin-top:8px;font-size:13px;color:var(--text-secondary);">
-                    Юзернейм: <span id="myProfileLink" style="color:var(--accent);">@username</span>
-                    <span class="copy-link" onclick="copyText(document.getElementById('myProfileLink').textContent)">📋 Копировать</span>
-                </div>
+            <!-- Профиль по центру -->
+            <div class="settings-profile" onclick="openSettingsAccount()">
+                <div class="avatar" id="settingsAvatar">A</div>
+                <div class="name" id="settingsName">Мой профиль</div>
+                <div class="username" id="settingsUsername">@username</div>
             </div>
 
-            <div class="settings-section">
-                <h4>Тема оформления</h4>
-                <div class="theme-options">
-                    <div class="theme-option active" data-theme="blue" onclick="setTheme('blue')"><div class="preview" style="background:#4f46e5;"></div><span>Синяя</span></div>
-                    <div class="theme-option" data-theme="green" onclick="setTheme('green')"><div class="preview" style="background:#16a34a;"></div><span>Зелёная</span></div>
-                    <div class="theme-option" data-theme="red" onclick="setTheme('red')"><div class="preview" style="background:#dc2626;"></div><span>Красная</span></div>
-                    <div class="theme-option" data-theme="purple" onclick="setTheme('purple')"><div class="preview" style="background:#7c3aed;"></div><span>Фиолетовая</span></div>
-                    <div class="theme-option" data-theme="orange" onclick="setTheme('orange')"><div class="preview" style="background:#ea580c;"></div><span>Оранжевая</span></div>
-                    <div class="theme-option" data-theme="pink" onclick="setTheme('pink')"><div class="preview" style="background:#db2777;"></div><span>Розовая</span></div>
+            <!-- Кнопки -->
+            <button class="settings-btn-item" onclick="openSettingsTheme()">
+                Тема оформления
+                <span class="arrow">›</span>
+            </button>
+            <button class="settings-btn-item" onclick="openSettingsAccount()">
+                Аккаунт
+                <span class="arrow">›</span>
+            </button>
+
+            <button class="settings-logout" onclick="logout()">Выйти</button>
+        </div>
+    </div>
+
+    <!-- ===== НАСТРОЙКИ: АККАУНТ ===== -->
+    <div class="settings-panel secondary" id="settingsAccountPanel">
+        <div class="settings-header">
+            <button class="back" onclick="closeSettingsAccount()">‹</button>
+            <h3>Аккаунт</h3>
+            <button class="settings-close" onclick="closeAllSettings()">✕</button>
+        </div>
+        <div class="settings-content">
+            <div class="account-info">
+                <div class="row">
+                    <span class="label">Email / Телефон</span>
+                    <span class="value" id="accountEmail">—</span>
                 </div>
-                <div style="margin-top:12px;">
-                    <button class="btn-secondary" onclick="toggleDarkMode()" style="width:100%;padding:10px;border-radius:12px;border:1px solid var(--border);cursor:pointer;font-weight:600;background:var(--input-bg);color:var(--text);">🌙 Тёмная тема</button>
+                <div class="row">
+                    <span class="label">Имя пользователя</span>
+                    <span class="value" id="accountName">—</span>
+                </div>
+                <div class="row">
+                    <span class="label">Юзернейм</span>
+                    <span class="value" id="accountUsername">@username</span>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <button class="logout-btn" onclick="logout()">Выйти</button>
+    <!-- ===== НАСТРОЙКИ: ТЕМА ОФОРМЛЕНИЯ ===== -->
+    <div class="settings-panel secondary" id="settingsThemePanel">
+        <div class="settings-header">
+            <button class="back" onclick="closeSettingsTheme()">‹</button>
+            <h3>Тема оформления</h3>
+            <button class="settings-close" onclick="closeAllSettings()">✕</button>
+        </div>
+        <div class="settings-content">
+            <div class="theme-grid">
+                <div class="theme-option active" data-theme="blue" onclick="setTheme('blue')">
+                    <div class="preview" style="background:#4f46e5;"></div>
+                    <span>Синяя</span>
+                </div>
+                <div class="theme-option" data-theme="green" onclick="setTheme('green')">
+                    <div class="preview" style="background:#16a34a;"></div>
+                    <span>Зелёная</span>
+                </div>
+                <div class="theme-option" data-theme="red" onclick="setTheme('red')">
+                    <div class="preview" style="background:#dc2626;"></div>
+                    <span>Красная</span>
+                </div>
+                <div class="theme-option" data-theme="purple" onclick="setTheme('purple')">
+                    <div class="preview" style="background:#7c3aed;"></div>
+                    <span>Фиолетовая</span>
+                </div>
+                <div class="theme-option" data-theme="orange" onclick="setTheme('orange')">
+                    <div class="preview" style="background:#ea580c;"></div>
+                    <span>Оранжевая</span>
+                </div>
+                <div class="theme-option" data-theme="pink" onclick="setTheme('pink')">
+                    <div class="preview" style="background:#db2777;"></div>
+                    <span>Розовая</span>
+                </div>
+            </div>
+            <button class="theme-dark-toggle" onclick="toggleDarkMode()" id="darkToggleBtn">🌙 Сменить на тёмную тему</button>
         </div>
     </div>
 </div>
 
+<!-- КНОПКА МЕНЮ -->
 <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰</button>
 
+<!-- МЕНЮ -->
 <div class="menu-overlay" id="menuOverlay">
     <button class="close" onclick="toggleMenu()">✕</button>
     <div class="title">Меню</div>
     <button class="menu-item" onclick="openCreateGroup(); toggleMenu();">Создать группу</button>
     <button class="menu-item" onclick="openFindUser(); toggleMenu();">Найти пользователя</button>
-    <button class="menu-item" onclick="toggleMenu(); openEditProfile();">Мой профиль</button>
+    <button class="menu-item" onclick="toggleMenu(); openSettings();">Настройки</button>
 </div>
 
+<!-- МОДАЛКИ -->
 <div class="modal-overlay hidden" id="modalProfile">
     <div class="modal">
         <h3>Редактировать профиль</h3>
@@ -316,9 +552,6 @@
         <input type="text" id="editName" placeholder="Имя">
         <input type="text" id="editUsername" placeholder="Юзернейм (без @)">
         <input type="file" id="editAvatarFile" accept="image/*" onchange="previewAvatar(this)">
-        <div style="font-size:13px;color:var(--text-secondary);text-align:center;margin-bottom:12px;">
-            Юзернейм: <span id="editProfileLink" style="color:var(--accent);">@username</span>
-        </div>
         <div class="modal-actions">
             <button class="btn-secondary" onclick="closeModal('modalProfile')">Отмена</button>
             <button class="btn-primary" onclick="saveProfile()">Сохранить</button>
@@ -378,7 +611,6 @@
         <div id="infoMembers" style="font-size:14px;margin:12px 0;line-height:1.6;"></div>
         <div style="font-size:13px;color:var(--text-secondary);text-align:center;margin:8px 0;">
             Ссылка: <span id="infoLink" style="color:var(--accent);"></span>
-            <span class="copy-link" onclick="copyText(document.getElementById('infoLink').textContent)">📋 Копировать</span>
         </div>
         <div id="infoJoinSection" style="display:none;">
             <button class="join-btn" id="joinBtn" onclick="joinGroup()">Вступить в группу</button>
@@ -398,7 +630,7 @@
 
 <script>
 // ============================================================
-// FIREBASE НАСТРОЙКИ (ТВОИ ДАННЫЕ)
+// FIREBASE НАСТРОЙКИ
 // ============================================================
 
 const firebaseConfig = {
@@ -410,16 +642,9 @@ const firebaseConfig = {
     appId: "1:65268399921:web:5dade7fdf0cbc49b107a10"
 };
 
-// ============================================================
-// ИНИЦИАЛИЗАЦИЯ FIREBASE
-// ============================================================
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
-db.enablePersistence()
-    .catch(err => console.warn('Оффлайн-режим не включён:', err));
-
+db.enablePersistence().catch(err => console.warn('Offline mode:', err));
 console.log('🔥 Firebase подключён!');
 
 // ============================================================
@@ -439,7 +664,7 @@ let foundUser = null;
 let allUsers = [];
 
 // ============================================================
-// 1. РАБОТА С FIREBASE
+// FIREBASE ФУНКЦИИ
 // ============================================================
 
 async function getUsers() {
@@ -479,12 +704,6 @@ async function getGroups() {
     return groups;
 }
 
-async function getGroupById(groupId) {
-    const doc = await db.collection('groups').doc(groupId).get();
-    if (!doc.exists) return null;
-    return { id: doc.id, ...doc.data() };
-}
-
 async function createGroup(groupData) {
     const docRef = await db.collection('groups').add(groupData);
     return { id: docRef.id, ...groupData };
@@ -522,7 +741,7 @@ async function sendMessageToFirebase(groupId, fromId, fromName, text) {
 }
 
 // ============================================================
-// 2. ТЕМА
+// ТЕМА
 // ============================================================
 
 function getTheme() {
@@ -542,8 +761,7 @@ function toggleDarkMode() {
     const isDark = !getDarkMode();
     localStorage.setItem(DARK_KEY, String(isDark));
     applyTheme();
-    const btn = document.querySelector('.settings-section:last-child .btn-secondary');
-    if (btn) btn.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
+    document.getElementById('darkToggleBtn').textContent = isDark ? '☀️ Сменить на светлую тему' : '🌙 Сменить на тёмную тему';
 }
 
 function applyTheme() {
@@ -555,10 +773,11 @@ function applyTheme() {
     document.querySelectorAll('.theme-option').forEach(el => {
         el.classList.toggle('active', el.dataset.theme === theme);
     });
+    document.getElementById('darkToggleBtn').textContent = isDark ? '☀️ Сменить на светлую тему' : '🌙 Сменить на тёмную тему';
 }
 
 // ============================================================
-// 3. АВТОРИЗАЦИЯ
+// АВТОРИЗАЦИЯ
 // ============================================================
 
 function switchTab(tab) {
@@ -628,7 +847,7 @@ async function handleRegister() {
         created: new Date().toISOString()
     };
 
-    const created = await createUser(newUser);
+    await createUser(newUser);
     errorEl.textContent = '';
     successEl.classList.remove('hidden');
     successEl.textContent = '✅ Аккаунт создан! Войдите.';
@@ -674,12 +893,12 @@ function logout() {
     currentUser = null;
     document.getElementById('app').classList.add('hidden');
     document.getElementById('authPage').classList.remove('hidden');
-    document.getElementById('settingsPanel').classList.remove('open');
+    closeAllSettings();
     document.getElementById('loginPassword').value = '';
 }
 
 // ============================================================
-// 4. ЗАПУСК
+// ЗАПУСК
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', async function() {
@@ -699,7 +918,65 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 // ============================================================
-// 5. ОСНОВНЫЕ ФУНКЦИИ
+// НАСТРОЙКИ
+// ============================================================
+
+function openSettings() {
+    document.getElementById('settingsPanel').classList.add('open');
+    updateSettingsProfile();
+}
+
+function closeSettings() {
+    document.getElementById('settingsPanel').classList.remove('open');
+    closeSettingsAccount();
+    closeSettingsTheme();
+}
+
+function closeAllSettings() {
+    document.getElementById('settingsPanel').classList.remove('open');
+    document.getElementById('settingsAccountPanel').classList.remove('open');
+    document.getElementById('settingsThemePanel').classList.remove('open');
+}
+
+function openSettingsAccount() {
+    document.getElementById('settingsAccountPanel').classList.add('open');
+    updateAccountInfo();
+}
+
+function closeSettingsAccount() {
+    document.getElementById('settingsAccountPanel').classList.remove('open');
+}
+
+function openSettingsTheme() {
+    document.getElementById('settingsThemePanel').classList.add('open');
+}
+
+function closeSettingsTheme() {
+    document.getElementById('settingsThemePanel').classList.remove('open');
+}
+
+function updateSettingsProfile() {
+    if (!currentUser) return;
+    const avatar = document.getElementById('settingsAvatar');
+    if (currentUser.avatar) {
+        avatar.innerHTML = `<img src="${currentUser.avatar}">`;
+    } else {
+        avatar.textContent = currentUser.name.charAt(0).toUpperCase();
+        avatar.style.background = 'var(--avatar-bg)';
+    }
+    document.getElementById('settingsName').textContent = currentUser.name;
+    document.getElementById('settingsUsername').textContent = '@' + currentUser.username;
+}
+
+function updateAccountInfo() {
+    if (!currentUser) return;
+    document.getElementById('accountEmail').textContent = currentUser.email || '—';
+    document.getElementById('accountName').textContent = currentUser.name || '—';
+    document.getElementById('accountUsername').textContent = '@' + currentUser.username;
+}
+
+// ============================================================
+// ОСНОВНЫЕ ФУНКЦИИ
 // ============================================================
 
 async function initApp() {
@@ -718,22 +995,9 @@ async function loadChats() {
 
 function updateProfile() {
     if (!currentUser) return;
-    document.getElementById('myName').textContent = currentUser.name;
-    document.getElementById('myUsername').textContent = '@' + currentUser.username;
     document.getElementById('settingsName').textContent = currentUser.name;
     document.getElementById('settingsUsername').textContent = '@' + currentUser.username;
-    document.getElementById('myProfileLink').textContent = '@' + currentUser.username;
-    document.getElementById('editProfileLink').textContent = '@' + currentUser.username;
-
-    const avatar = document.getElementById('myAvatar');
-    const settingsAvatar = document.getElementById('settingsAvatar');
-    if (currentUser.avatar) {
-        avatar.innerHTML = `<img src="${currentUser.avatar}">`;
-        settingsAvatar.innerHTML = `<img src="${currentUser.avatar}">`;
-    } else {
-        avatar.textContent = currentUser.name.charAt(0).toUpperCase();
-        settingsAvatar.textContent = currentUser.name.charAt(0).toUpperCase();
-    }
+    updateSettingsProfile();
 }
 
 function renderChatList() {
@@ -870,7 +1134,7 @@ async function sendMessage() {
 }
 
 // ============================================================
-// 6. ГРУППЫ
+// ГРУППЫ
 // ============================================================
 
 function openCreateGroup() {
@@ -965,7 +1229,7 @@ function deleteGroup() {
 }
 
 // ============================================================
-// 7. ПОИСК ПОЛЬЗОВАТЕЛЯ
+// ПОИСК ПОЛЬЗОВАТЕЛЯ
 // ============================================================
 
 function openFindUser() {
@@ -1037,34 +1301,36 @@ async function startPrivateChatWith(userId) {
         g.members.includes(userId)
     );
 
-    if (!existingChat) {
-        const newGroup = {
-            name: user.name,
-            type: 'private',
-            link: 'private_' + Date.now(),
-            avatar: user.avatar,
-            owner: currentUser.id,
-            ownerName: currentUser.name,
-            members: [currentUser.id, userId],
-            memberNames: [currentUser.name, user.name],
-            lastMessage: 'Чат создан',
-            created: new Date().toISOString()
-        };
-        const created = await createGroup(newGroup);
-        chats.push(created);
-        closeModal('modalUserProfile');
-        closeModal('modalFindUser');
-        renderChatList();
-        openChat(created.id);
-    } else {
+    if (existingChat) {
         closeModal('modalUserProfile');
         closeModal('modalFindUser');
         openChat(existingChat.id);
+        return;
     }
+
+    const newGroup = {
+        name: user.name,
+        type: 'private',
+        link: 'private_' + Date.now(),
+        avatar: user.avatar || null,
+        owner: currentUser.id,
+        ownerName: currentUser.name,
+        members: [currentUser.id, userId],
+        memberNames: [currentUser.name, user.name],
+        lastMessage: 'Чат создан',
+        created: new Date().toISOString()
+    };
+
+    const created = await createGroup(newGroup);
+    chats.push(created);
+    closeModal('modalUserProfile');
+    closeModal('modalFindUser');
+    renderChatList();
+    openChat(created.id);
 }
 
 // ============================================================
-// 8. ИНФО О ГРУППЕ
+// ИНФО О ГРУППЕ
 // ============================================================
 
 async function openChatInfo() {
@@ -1122,7 +1388,7 @@ async function joinGroup() {
 }
 
 // ============================================================
-// 9. ПРОФИЛЬ
+// ПРОФИЛЬ
 // ============================================================
 
 function openEditProfile() {
@@ -1132,8 +1398,7 @@ function openEditProfile() {
     document.getElementById('profileAvatarPreview').src = currentUser.avatar || 
         `https://via.placeholder.com/80/7c3aed/ffffff?text=${currentUser.name.charAt(0).toUpperCase()}`;
     document.getElementById('modalProfile').classList.remove('hidden');
-    document.getElementById('editProfileLink').textContent = '@' + currentUser.username;
-    document.getElementById('settingsPanel').classList.remove('open');
+    closeAllSettings();
 }
 
 function previewAvatar(input) {
@@ -1185,15 +1450,11 @@ async function saveProfile() {
 }
 
 // ============================================================
-// 10. ОБЩИЕ ФУНКЦИИ
+// ОБЩИЕ ФУНКЦИИ
 // ============================================================
 
 function toggleMenu() {
     document.getElementById('menuOverlay').classList.toggle('open');
-}
-
-function toggleSettings() {
-    document.getElementById('settingsPanel').classList.toggle('open');
 }
 
 function filterChats() {
@@ -1207,24 +1468,6 @@ function filterChats() {
 
 function closeModal(id) {
     document.getElementById(id).classList.add('hidden');
-}
-
-function copyText(text) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => alert('✅ Скопировано!')).catch(() => fallbackCopy(text));
-    } else {
-        fallbackCopy(text);
-    }
-}
-
-function fallbackCopy(text) {
-    const input = document.createElement('input');
-    input.value = text;
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand('copy');
-    document.body.removeChild(input);
-    alert('✅ Скопировано!');
 }
 
 function updateMenuVisibility() {
@@ -1262,8 +1505,8 @@ window.addEventListener('resize', function() {
     updateMenuVisibility();
 });
 
-console.log('💬 musezzy с Firebase загружен!');
-console.log('🔥 Данные синхронизируются в реальном времени!');
+console.log('💬 musezzy загружен!');
+console.log('🔥 Данные в Firebase!');
 </script>
 
 </body>
