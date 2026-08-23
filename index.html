@@ -48,7 +48,6 @@
         body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; transition: background 0.3s, color 0.3s; }
         .hidden { display: none !important; }
 
-        /* АВТОРИЗАЦИЯ */
         .auth-page {
             width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center;
             background: var(--bg); padding: 20px; transition: background 0.3s;
@@ -77,7 +76,6 @@
         .auth-error { color: #ef4444; font-size: 13px; margin-top: 8px; text-align: center; min-height: 20px; }
         .auth-success { color: #22c55e; font-size: 13px; margin-top: 8px; text-align: center; }
 
-        /* ПРИЛОЖЕНИЕ */
         .app { display: flex; width: 100%; height: 100vh; max-width: 1400px; background: var(--bg); overflow: hidden; transition: background 0.3s; position: relative; }
         .sidebar { width: 360px; min-width: 300px; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; transition: background 0.3s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; z-index: 2; }
         .sidebar-header { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
@@ -163,7 +161,6 @@
         .profile-actions button { flex: 1; padding: 10px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; }
         .profile-actions button:hover { transform: scale(1.02); }
 
-        /* ===== НАСТРОЙКИ ===== */
         .settings-overlay {
             position: absolute;
             top: 0;
@@ -247,7 +244,6 @@
             gap: 12px;
         }
 
-        /* Профиль в настройках */
         .settings-profile {
             display: flex;
             flex-direction: column;
@@ -318,7 +314,6 @@
         }
         .settings-logout:hover { background: #ef4444; color: white; transform: scale(1.02); }
 
-        /* ===== АККАУНТ (внутри панели) ===== */
         .account-info {
             display: flex;
             flex-direction: column;
@@ -344,7 +339,6 @@
             color: var(--text);
         }
 
-        /* ===== ТЕМА ОФОРМЛЕНИЯ ===== */
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -385,7 +379,6 @@
         }
         .theme-dark-toggle:hover { border-color: var(--accent); background: var(--hover-bg); transform: scale(1.02); }
 
-        /* ===== АНИМАЦИИ ===== */
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -407,7 +400,6 @@
             50% { transform: scale(1.03); }
         }
 
-        /* АДАПТИВ */
         @media (max-width: 768px) {
             .sidebar { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
             .sidebar.hidden { transform: translateX(-100%); }
@@ -431,7 +423,6 @@
 </head>
 <body>
 
-<!-- АВТОРИЗАЦИЯ -->
 <div id="authPage" class="auth-page">
     <div class="auth-card">
         <div class="auth-logo">💬</div>
@@ -468,13 +459,10 @@
     </div>
 </div>
 
-<!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
 <div id="app" class="app hidden">
 
-    <!-- Затемнение -->
     <div class="settings-overlay" id="settingsOverlay" onclick="closeAllSettings()"></div>
 
-    <!-- САЙДБАР -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <span class="sidebar-title">musezzy</span>
@@ -488,7 +476,6 @@
         <div class="chat-list" id="chatList"></div>
     </div>
 
-    <!-- ЧАТ -->
     <div class="chat-area" id="chatArea">
         <div class="chat-header" id="chatHeader">
             <button class="back-btn" onclick="closeChat()">←</button>
@@ -506,21 +493,18 @@
         </div>
     </div>
 
-    <!-- ===== НАСТРОЙКИ (главная панель) ===== -->
     <div class="settings-panel" id="settingsPanel">
         <div class="panel-header">
             <h3>Настройки</h3>
             <button class="panel-close" onclick="closeAllSettings()">✕</button>
         </div>
         <div class="panel-body">
-            <!-- Профиль -->
             <div class="settings-profile" onclick="openEditProfile()">
                 <div class="avatar" id="settingsAvatar">A</div>
                 <div class="name" id="settingsName">Мой профиль</div>
                 <div class="username" id="settingsUsername">@username</div>
             </div>
 
-            <!-- Кнопки -->
             <button class="settings-btn-item" onclick="openSettingsTheme()">
                 Тема оформления
                 <span class="arrow">›</span>
@@ -534,7 +518,6 @@
         </div>
     </div>
 
-    <!-- ===== НАСТРОЙКИ: ТЕМА ОФОРМЛЕНИЯ ===== -->
     <div class="settings-panel" id="settingsThemePanel">
         <div class="panel-header">
             <button class="back-btn-settings" onclick="closeSettingsTheme()">‹</button>
@@ -572,7 +555,6 @@
         </div>
     </div>
 
-    <!-- ===== НАСТРОЙКИ: АККАУНТ ===== -->
     <div class="settings-panel" id="settingsAccountPanel">
         <div class="panel-header">
             <button class="back-btn-settings" onclick="closeSettingsAccount()">‹</button>
@@ -598,19 +580,17 @@
     </div>
 </div>
 
-<!-- КНОПКА МЕНЮ -->
 <button class="menu-btn" id="menuBtn" onclick="toggleMenu()">☰</button>
 
-<!-- МЕНЮ -->
 <div class="menu-overlay" id="menuOverlay">
     <button class="close" onclick="toggleMenu()">✕</button>
     <div class="title">Меню</div>
     <button class="menu-item" onclick="openCreateGroup(); toggleMenu();">Создать группу</button>
     <button class="menu-item" onclick="openFindUser(); toggleMenu();">Найти пользователя</button>
     <button class="menu-item" onclick="toggleMenu(); openSettings();">Настройки</button>
+    <button class="menu-item" onclick="refreshChats(); toggleMenu();">🔄 Обновить чаты</button>
 </div>
 
-<!-- МОДАЛКИ -->
 <div class="modal-overlay hidden" id="modalProfile">
     <div class="modal">
         <h3>Редактировать профиль</h3>
@@ -690,7 +670,6 @@
     </div>
 </div>
 
-<!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
@@ -1298,14 +1277,19 @@ function openCreateGroup() {
     document.getElementById('groupAvatarFile').value = '';
     document.getElementById('groupAvatarPreview').src = 'https://via.placeholder.com/80/7c3aed/ffffff?text=G';
     groupAvatarData = null;
-    document.getElementById('groupPreviewLink').textContent = '';
+    
+    // Генерируем ссылку и показываем
+    const generatedLink = 'group_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
+    document.getElementById('groupPreviewLink').textContent = generatedLink;
+    document.getElementById('groupPreviewLink').style.color = 'var(--accent)';
     
     document.getElementById('groupLink').oninput = function() {
         const link = this.value.trim();
         if (link) {
             document.getElementById('groupPreviewLink').textContent = link;
         } else {
-            document.getElementById('groupPreviewLink').textContent = 'будет сгенерирована автоматически';
+            const genLink = 'group_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
+            document.getElementById('groupPreviewLink').textContent = genLink;
         }
     };
 }
@@ -1326,7 +1310,7 @@ async function createGroup() {
     const link = document.getElementById('groupLink').value.trim();
     
     if (!name) { 
-        alert('Введите название группы'); 
+        alert('⚠️ Введите название группы'); 
         return; 
     }
     
@@ -1338,13 +1322,13 @@ async function createGroup() {
     
     // Проверяем только если пользователь ввел ссылку
     if (link && !/^[a-zA-Z0-9_]{3,20}$/.test(link)) { 
-        alert('Ссылка: 3-20 символов (a-z, 0-9, _)'); 
+        alert('⚠️ Ссылка: 3-20 символов (a-z, 0-9, _)'); 
         return; 
     }
 
     const groups = await getGroups();
     if (groups.some(g => g.link === finalLink)) {
-        alert('Эта ссылка уже занята, используйте другую');
+        alert('⚠️ Эта ссылка уже занята, используйте другую');
         return;
     }
 
@@ -1366,8 +1350,9 @@ async function createGroup() {
         closeModal('modalCreateGroup');
         renderChatList();
         openChat(created.id);
+        alert('✅ Группа "' + name + '" успешно создана!');
     } catch (error) {
-        alert('Не удалось создать группу: ' + error.message);
+        alert('❌ Не удалось создать группу: ' + error.message);
         console.error(error);
     }
 }
@@ -1531,22 +1516,24 @@ function openUserProfile(userId) {
 function startPrivateChat() {
     if (foundUser) {
         startPrivateChatWith(foundUser.id);
+    } else {
+        alert('⚠️ Пользователь не выбран');
     }
 }
 
 // ============================================================
-// ЛИЧНЫЙ ЧАТ (ИСПРАВЛЕНО - БЕЗ ЗАПРОСА НАЗВАНИЯ)
+// ЛИЧНЫЙ ЧАТ (ИСПРАВЛЕНО)
 // ============================================================
 
 async function startPrivateChatWith(userId) {
     if (!userId) {
-        alert('Пользователь не найден');
+        alert('⚠️ Пользователь не найден');
         return;
     }
     
     const user = await getUserById(userId);
     if (!user) {
-        alert('Пользователь не найден');
+        alert('⚠️ Пользователь не найден');
         return;
     }
 
@@ -1589,10 +1576,28 @@ async function startPrivateChatWith(userId) {
         closeModal('modalFindUser');
         renderChatList();
         openChat(created.id);
+        alert('✅ Чат с ' + user.name + ' создан!');
     } catch (e) {
         console.error('Ошибка создания чата:', e);
-        alert('Не удалось создать чат: ' + e.message);
+        alert('❌ Не удалось создать чат: ' + e.message);
     }
+}
+
+// ============================================================
+// ОБНОВЛЕНИЕ ЧАТОВ
+// ============================================================
+
+async function refreshChats() {
+    await loadChats();
+    renderChatList();
+    if (activeChatId) {
+        const chat = chats.find(c => c.id === activeChatId);
+        if (chat) {
+            await loadMessages(activeChatId);
+            renderMessages(activeChatId);
+        }
+    }
+    alert('✅ Чаты обновлены!');
 }
 
 // ============================================================
