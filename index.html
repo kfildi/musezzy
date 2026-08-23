@@ -154,251 +154,57 @@
         .avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin: 0 auto 16px; display: block; }
         .join-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--accent); color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 12px; transition: 0.2s; }
         .join-btn:hover { transform: scale(1.02); }
-        .join-btn.joined { background: var(--text-secondary); cursor: default; }
-        .join-btn.joined:hover { transform: none; }
 
         .profile-actions { display: flex; gap: 10px; margin-top: 12px; }
         .profile-actions button { flex: 1; padding: 10px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; }
-        .profile-actions button:hover { transform: scale(1.02); }
 
-        .settings-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.3);
-            z-index: 5;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            backdrop-filter: blur(2px);
-        }
-        .settings-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .settings-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 5; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; backdrop-filter: blur(2px); }
+        .settings-overlay.open { opacity: 1; pointer-events: auto; }
 
-        .settings-panel {
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 380px;
-            max-width: 85vw;
-            height: 100%;
-            background: var(--card);
-            z-index: 10;
-            transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            box-shadow: 4px 0 30px rgba(0,0,0,0.15);
-            border-right: 1px solid var(--border);
-        }
-        .settings-panel.open {
-            left: 0;
-        }
-        .settings-panel .panel-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .settings-panel .panel-header h3 {
-            font-size: 18px;
-            font-weight: 700;
-        }
-        .settings-panel .panel-header .back-btn-settings {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            padding: 4px 8px;
-            border-radius: 8px;
-            transition: 0.2s;
-        }
-        .settings-panel .panel-header .back-btn-settings:hover {
-            background: var(--hover-bg);
-        }
-        .settings-panel .panel-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            padding: 4px 8px;
-            border-radius: 8px;
-            transition: 0.2s;
-        }
-        .settings-panel .panel-close:hover {
-            background: var(--hover-bg);
-            transform: rotate(90deg);
-        }
-        .settings-panel .panel-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+        .settings-panel { position: absolute; top: 0; left: -100%; width: 380px; max-width: 85vw; height: 100%; background: var(--card); z-index: 10; transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: 4px 0 30px rgba(0,0,0,0.15); border-right: 1px solid var(--border); }
+        .settings-panel.open { left: 0; }
+        .settings-panel .panel-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .settings-panel .panel-header h3 { font-size: 18px; font-weight: 700; }
+        .settings-panel .panel-header .back-btn-settings { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-secondary); padding: 4px 8px; border-radius: 8px; transition: 0.2s; }
+        .settings-panel .panel-header .back-btn-settings:hover { background: var(--hover-bg); }
+        .settings-panel .panel-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-secondary); padding: 4px 8px; border-radius: 8px; transition: 0.2s; }
+        .settings-panel .panel-close:hover { background: var(--hover-bg); transform: rotate(90deg); }
+        .settings-panel .panel-body { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
 
-        .settings-profile {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0 16px;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 8px;
-            cursor: pointer;
-        }
-        .settings-profile .avatar {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            font-size: 28px;
-            background: var(--avatar-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            overflow: hidden;
-            transition: 0.3s;
-            cursor: pointer;
-        }
+        .settings-profile { display: flex; flex-direction: column; align-items: center; padding: 20px 0 16px; border-bottom: 1px solid var(--border); margin-bottom: 8px; cursor: pointer; }
+        .settings-profile .avatar { width: 72px; height: 72px; border-radius: 50%; font-size: 28px; background: var(--avatar-bg); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; overflow: hidden; transition: 0.3s; cursor: pointer; }
         .settings-profile .avatar:hover { transform: scale(1.05); }
         .settings-profile .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .settings-profile .name {
-            font-size: 18px;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-        .settings-profile .username {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
+        .settings-profile .name { font-size: 18px; font-weight: 600; margin-top: 8px; }
+        .settings-profile .username { font-size: 14px; color: var(--text-secondary); }
 
-        .settings-btn-item {
-            width: 100%;
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: none;
-            background: var(--input-bg);
-            color: var(--text);
-            cursor: pointer;
-            text-align: left;
-            font-size: 15px;
-            font-weight: 500;
-            transition: 0.2s;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .settings-btn-item { width: 100%; padding: 14px 18px; border-radius: 12px; border: none; background: var(--input-bg); color: var(--text); cursor: pointer; text-align: left; font-size: 15px; font-weight: 500; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
         .settings-btn-item:hover { background: var(--hover-bg); color: var(--accent); transform: translateX(4px); }
         .settings-btn-item .arrow { color: var(--text-secondary); font-size: 18px; }
 
-        .settings-logout {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: 2px solid #ef4444;
-            background: transparent;
-            color: #ef4444;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 15px;
-            transition: 0.2s;
-            margin-top: auto;
-        }
+        .settings-logout { width: 100%; padding: 14px; border-radius: 12px; border: 2px solid #ef4444; background: transparent; color: #ef4444; cursor: pointer; font-weight: 600; font-size: 15px; transition: 0.2s; margin-top: auto; }
         .settings-logout:hover { background: #ef4444; color: white; transform: scale(1.02); }
 
-        .account-info {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .account-info .row {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            padding: 12px 16px;
-            background: var(--input-bg);
-            border-radius: 12px;
-        }
-        .account-info .row .label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .account-info .row .value {
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--text);
-        }
+        .account-info { display: flex; flex-direction: column; gap: 12px; }
+        .account-info .row { display: flex; flex-direction: column; gap: 2px; padding: 12px 16px; background: var(--input-bg); border-radius: 12px; }
+        .account-info .row .label { font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.3px; }
+        .account-info .row .value { font-size: 16px; font-weight: 500; color: var(--text); }
 
-        .theme-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-        .theme-option {
-            padding: 12px 8px;
-            border-radius: 12px;
-            border: 2px solid var(--border);
-            cursor: pointer;
-            text-align: center;
-            transition: 0.3s;
-            background: var(--input-bg);
-        }
+        .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .theme-option { padding: 12px 8px; border-radius: 12px; border: 2px solid var(--border); cursor: pointer; text-align: center; transition: 0.3s; background: var(--input-bg); }
         .theme-option:hover { border-color: var(--accent); transform: scale(1.05); }
         .theme-option.active { border-color: var(--accent); background: var(--active-bg); }
-        .theme-option .preview {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            margin: 0 auto 4px;
-            border: 1px solid var(--border);
-        }
+        .theme-option .preview { width: 32px; height: 32px; border-radius: 50%; margin: 0 auto 4px; border: 1px solid var(--border); }
         .theme-option span { font-size: 12px; color: var(--text); }
 
-        .theme-dark-toggle {
-            width: 100%;
-            padding: 12px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--input-bg);
-            color: var(--text);
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: 0.2s;
-            margin-top: 4px;
-        }
+        .theme-dark-toggle { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); cursor: pointer; font-weight: 500; font-size: 14px; transition: 0.2s; margin-top: 4px; }
         .theme-dark-toggle:hover { border-color: var(--accent); background: var(--hover-bg); transform: scale(1.02); }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideInMsg {
-            from { opacity: 0; transform: translateY(10px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideInMsg { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 
         @media (max-width: 768px) {
             .sidebar { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -412,12 +218,6 @@
             .menu-btn { bottom: 16px; right: 16px; width: 48px; height: 48px; font-size: 22px; }
             .menu-overlay { width: 280px; }
             .theme-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-        @media (max-width: 400px) {
-            .auth-card { padding: 16px; }
-            .modal { padding: 20px; }
-            .sidebar { min-width: 100%; }
-            .theme-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -460,7 +260,6 @@
 </div>
 
 <div id="app" class="app hidden">
-
     <div class="settings-overlay" id="settingsOverlay" onclick="closeAllSettings()"></div>
 
     <div class="sidebar" id="sidebar">
@@ -468,11 +267,9 @@
             <span class="sidebar-title">musezzy</span>
             <button class="settings-btn" onclick="openSettings()">⚙️</button>
         </div>
-
         <div class="search-bar">
             <input type="text" placeholder="Поиск чатов..." id="searchInput" oninput="filterChats()">
         </div>
-
         <div class="chat-list" id="chatList"></div>
     </div>
 
@@ -504,16 +301,12 @@
                 <div class="name" id="settingsName">Мой профиль</div>
                 <div class="username" id="settingsUsername">@username</div>
             </div>
-
             <button class="settings-btn-item" onclick="openSettingsTheme()">
-                Тема оформления
-                <span class="arrow">›</span>
+                Тема оформления <span class="arrow">›</span>
             </button>
             <button class="settings-btn-item" onclick="openSettingsAccount()">
-                Аккаунт
-                <span class="arrow">›</span>
+                Аккаунт <span class="arrow">›</span>
             </button>
-
             <button class="settings-logout" onclick="logout()">Выйти</button>
         </div>
     </div>
@@ -527,28 +320,22 @@
         <div class="panel-body">
             <div class="theme-grid">
                 <div class="theme-option active" data-theme="blue" onclick="setTheme('blue')">
-                    <div class="preview" style="background:#4f46e5;"></div>
-                    <span>Синяя</span>
+                    <div class="preview" style="background:#4f46e5;"></div><span>Синяя</span>
                 </div>
                 <div class="theme-option" data-theme="green" onclick="setTheme('green')">
-                    <div class="preview" style="background:#16a34a;"></div>
-                    <span>Зелёная</span>
+                    <div class="preview" style="background:#16a34a;"></div><span>Зелёная</span>
                 </div>
                 <div class="theme-option" data-theme="red" onclick="setTheme('red')">
-                    <div class="preview" style="background:#dc2626;"></div>
-                    <span>Красная</span>
+                    <div class="preview" style="background:#dc2626;"></div><span>Красная</span>
                 </div>
                 <div class="theme-option" data-theme="purple" onclick="setTheme('purple')">
-                    <div class="preview" style="background:#7c3aed;"></div>
-                    <span>Фиолетовая</span>
+                    <div class="preview" style="background:#7c3aed;"></div><span>Фиолетовая</span>
                 </div>
                 <div class="theme-option" data-theme="orange" onclick="setTheme('orange')">
-                    <div class="preview" style="background:#ea580c;"></div>
-                    <span>Оранжевая</span>
+                    <div class="preview" style="background:#ea580c;"></div><span>Оранжевая</span>
                 </div>
                 <div class="theme-option" data-theme="pink" onclick="setTheme('pink')">
-                    <div class="preview" style="background:#db2777;"></div>
-                    <span>Розовая</span>
+                    <div class="preview" style="background:#db2777;"></div><span>Розовая</span>
                 </div>
             </div>
             <button class="theme-dark-toggle" onclick="toggleDarkMode()" id="darkToggleBtn">🌙 Сменить на тёмную тему</button>
@@ -563,18 +350,9 @@
         </div>
         <div class="panel-body">
             <div class="account-info">
-                <div class="row">
-                    <span class="label">Email / Телефон</span>
-                    <span class="value" id="accountEmail">—</span>
-                </div>
-                <div class="row">
-                    <span class="label">Имя пользователя</span>
-                    <span class="value" id="accountName">—</span>
-                </div>
-                <div class="row">
-                    <span class="label">Юзернейм</span>
-                    <span class="value" id="accountUsername">@username</span>
-                </div>
+                <div class="row"><span class="label">Email / Телефон</span><span class="value" id="accountEmail">—</span></div>
+                <div class="row"><span class="label">Имя пользователя</span><span class="value" id="accountName">—</span></div>
+                <div class="row"><span class="label">Юзернейм</span><span class="value" id="accountUsername">@username</span></div>
             </div>
         </div>
     </div>
@@ -585,7 +363,7 @@
 <div class="menu-overlay" id="menuOverlay">
     <button class="close" onclick="toggleMenu()">✕</button>
     <div class="title">Меню</div>
-    <button class="menu-item" onclick="openCreateGroup(); toggleMenu();">Создать группу</button>
+    <button class="menu-item" onclick="openCreateGroupModal(); toggleMenu();">Создать группу</button>
     <button class="menu-item" onclick="openFindUser(); toggleMenu();">Найти пользователя</button>
     <button class="menu-item" onclick="toggleMenu(); openSettings();">Настройки</button>
     <button class="menu-item" onclick="refreshChats(); toggleMenu();">🔄 Обновить чаты</button>
@@ -631,7 +409,7 @@
         </div>
         <div class="modal-actions">
             <button class="btn-secondary" onclick="closeModal('modalCreateGroup')">Отмена</button>
-            <button class="btn-primary" onclick="createGroup()">Создать</button>
+            <button class="btn-primary" onclick="handleCreateGroup()">Создать</button>
         </div>
     </div>
 </div>
@@ -662,7 +440,7 @@
             <button class="join-btn" id="joinBtn" onclick="joinGroup()">Вступить в группу</button>
         </div>
         <div id="infoDeleteSection" style="display:none;margin-top:12px;">
-            <button class="btn-danger" onclick="deleteGroup()" style="width:100%;padding:12px;border:none;border-radius:12px;cursor:pointer;font-weight:600;">🗑️ Удалить группу</button>
+            <button class="btn-danger" onclick="deleteGroupAction()" style="width:100%;padding:12px;border:none;border-radius:12px;cursor:pointer;font-weight:600;">🗑️ Удалить группу</button>
         </div>
         <div class="modal-actions">
             <button class="btn-secondary" onclick="closeModal('modalChatInfo')">Закрыть</button>
@@ -674,10 +452,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
-// ============================================================
-// FIREBASE НАСТРОЙКИ
-// ============================================================
-
 const firebaseConfig = {
     apiKey: "AIzaSyDLkpmdh1K-V6xiclzonkshpECtZsrh35g",
     authDomain: "musezzy-76e81.firebaseapp.com",
@@ -690,11 +464,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 db.enablePersistence().catch(err => console.warn('Offline mode:', err));
-console.log('🔥 Firebase подключён!');
-
-// ============================================================
-// ПЕРЕМЕННЫЕ
-// ============================================================
 
 const STORAGE_KEY = 'musezzy_user';
 const THEME_KEY = 'musezzy_theme';
@@ -708,20 +477,14 @@ let groupAvatarData = null;
 let foundUser = null;
 let allUsers = [];
 
-// ============================================================
-// FIREBASE ФУНКЦИИ
-// ============================================================
-
+// ================= API / DB =================
 async function getUsers() {
     try {
         const snapshot = await db.collection('users').get();
         const users = [];
         snapshot.forEach(doc => users.push({ id: doc.id, ...doc.data() }));
         return users;
-    } catch (error) {
-        console.error('Ошибка загрузки пользователей:', error);
-        return [];
-    }
+    } catch (e) { return []; }
 }
 
 async function getUserByUsername(username) {
@@ -731,10 +494,7 @@ async function getUserByUsername(username) {
         let user = null;
         snapshot.forEach(doc => user = { id: doc.id, ...doc.data() });
         return user;
-    } catch (error) {
-        console.error('Ошибка поиска пользователя:', error);
-        return null;
-    }
+    } catch (e) { return null; }
 }
 
 async function getUserById(userId) {
@@ -742,29 +502,16 @@ async function getUserById(userId) {
         const doc = await db.collection('users').doc(userId).get();
         if (!doc.exists) return null;
         return { id: doc.id, ...doc.data() };
-    } catch (error) {
-        console.error('Ошибка загрузки пользователя:', error);
-        return null;
-    }
+    } catch (e) { return null; }
 }
 
-async function createUser(userData) {
-    try {
-        const docRef = await db.collection('users').add(userData);
-        return { id: docRef.id, ...userData };
-    } catch (error) {
-        console.error('Ошибка создания пользователя:', error);
-        throw error;
-    }
+async function createUserInDb(userData) {
+    const docRef = await db.collection('users').add(userData);
+    return { id: docRef.id, ...userData };
 }
 
 async function updateUser(userId, data) {
-    try {
-        await db.collection('users').doc(userId).update(data);
-    } catch (error) {
-        console.error('Ошибка обновления пользователя:', error);
-        throw error;
-    }
+    await db.collection('users').doc(userId).update(data);
 }
 
 async function getGroups() {
@@ -773,40 +520,22 @@ async function getGroups() {
         const groups = [];
         snapshot.forEach(doc => groups.push({ id: doc.id, ...doc.data() }));
         return groups;
-    } catch (error) {
-        console.error('Ошибка загрузки групп:', error);
-        return [];
-    }
+    } catch (e) { return []; }
 }
 
-async function createGroup(groupData) {
-    try {
-        const docRef = await db.collection('groups').add(groupData);
-        return { id: docRef.id, ...groupData };
-    } catch (error) {
-        console.error('Ошибка создания группы:', error);
-        throw error;
-    }
+async function createGroupInDb(groupData) {
+    const docRef = await db.collection('groups').add(groupData);
+    return { id: docRef.id, ...groupData };
 }
 
 async function updateGroup(groupId, data) {
-    try {
-        await db.collection('groups').doc(groupId).update(data);
-    } catch (error) {
-        console.error('Ошибка обновления группы:', error);
-        throw error;
-    }
+    await db.collection('groups').doc(groupId).update(data);
 }
 
-async function deleteGroup(groupId) {
-    try {
-        await db.collection('groups').doc(groupId).delete();
-        const msgs = await db.collection('messages').where('groupId', '==', groupId).get();
-        msgs.forEach(doc => doc.ref.delete());
-    } catch (error) {
-        console.error('Ошибка удаления группы:', error);
-        throw error;
-    }
+async function deleteGroupInDb(groupId) {
+    await db.collection('groups').doc(groupId).delete();
+    const msgs = await db.collection('messages').where('groupId', '==', groupId).get();
+    msgs.forEach(doc => doc.ref.delete());
 }
 
 async function getMessages(groupId) {
@@ -818,10 +547,7 @@ async function getMessages(groupId) {
         const messages = [];
         snapshot.forEach(doc => messages.push({ id: doc.id, ...doc.data() }));
         return messages;
-    } catch (error) {
-        console.error('Ошибка загрузки сообщений:', error);
-        return [];
-    }
+    } catch (e) { return []; }
 }
 
 async function sendMessageToFirebase(groupId, fromId, fromName, text) {
@@ -834,23 +560,12 @@ async function sendMessageToFirebase(groupId, fromId, fromName, text) {
             time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
-    } catch (error) {
-        console.error('Ошибка отправки сообщения:', error);
-        alert('Не удалось отправить сообщение');
-    }
+    } catch (e) { alert('Не удалось отправить сообщение'); }
 }
 
-// ============================================================
-// ТЕМА
-// ============================================================
-
-function getTheme() {
-    return localStorage.getItem(THEME_KEY) || 'blue';
-}
-
-function getDarkMode() {
-    return localStorage.getItem(DARK_KEY) === 'true';
-}
+// ================= ТЕМЫ =================
+function getTheme() { return localStorage.getItem(THEME_KEY) || 'blue'; }
+function getDarkMode() { return localStorage.getItem(DARK_KEY) === 'true'; }
 
 function setTheme(theme) {
     localStorage.setItem(THEME_KEY, theme);
@@ -861,7 +576,6 @@ function toggleDarkMode() {
     const isDark = !getDarkMode();
     localStorage.setItem(DARK_KEY, String(isDark));
     applyTheme();
-    document.getElementById('darkToggleBtn').textContent = isDark ? '☀️ Сменить на светлую тему' : '🌙 Сменить на тёмную тему';
 }
 
 function applyTheme() {
@@ -870,16 +584,12 @@ function applyTheme() {
     document.body.className = '';
     document.body.classList.add('theme-' + theme);
     if (isDark) document.body.classList.add('dark');
-    document.querySelectorAll('.theme-option').forEach(el => {
-        el.classList.toggle('active', el.dataset.theme === theme);
-    });
-    document.getElementById('darkToggleBtn').textContent = isDark ? '☀️ Сменить на светлую тему' : '🌙 Сменить на тёмную тему';
+    document.querySelectorAll('.theme-option').forEach(el => el.classList.toggle('active', el.dataset.theme === theme));
+    const toggleBtn = document.getElementById('darkToggleBtn');
+    if (toggleBtn) toggleBtn.textContent = isDark ? '☀️ Сменить на светлую тему' : '🌙 Сменить на тёмную тему';
 }
 
-// ============================================================
-// АВТОРИЗАЦИЯ
-// ============================================================
-
+// ================= АВТОРИЗАЦИЯ =================
 function switchTab(tab) {
     document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.auth-tab-content').forEach(t => t.classList.remove('active'));
@@ -887,30 +597,14 @@ function switchTab(tab) {
     document.getElementById(`tab${tab.charAt(0).toUpperCase() + tab.slice(1)}`).classList.add('active');
     document.getElementById('loginError').textContent = '';
     document.getElementById('registerError').textContent = '';
-    document.getElementById('registerSuccess').classList.add('hidden');
 }
 
-function isValidEmail(value) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-}
-
-function isValidPhone(value) {
-    const clean = value.replace(/[^0-9+]/g, '');
-    return clean.length >= 10 && clean.length <= 15;
-}
-
-function isValidUsername(value) {
-    return /^[a-zA-Z0-9_]{3,20}$/.test(value);
-}
-
-function isValidPassword(value) {
-    return value.length >= 6;
-}
-
-function normalizeLogin(value) {
-    const trimmed = value.trim();
-    if (trimmed.includes('@')) return trimmed.toLowerCase();
-    return trimmed.replace(/[^0-9+]/g, '');
+function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+function isValidPhone(v) { return v.replace(/[^0-9+]/g, '').length >= 10; }
+function isValidUsername(v) { return /^[a-zA-Z0-9_]{3,20}$/.test(v); }
+function normalizeLogin(v) {
+    const trimmed = v.trim();
+    return trimmed.includes('@') ? trimmed.toLowerCase() : trimmed.replace(/[^0-9+]/g, '');
 }
 
 async function handleRegister() {
@@ -919,50 +613,25 @@ async function handleRegister() {
     const email = document.getElementById('regEmail').value.trim();
     const password = document.getElementById('regPassword').value;
     const errorEl = document.getElementById('registerError');
-    const successEl = document.getElementById('registerSuccess');
 
-    if (!name) { errorEl.textContent = 'Введите имя'; return; }
-    if (!isValidUsername(username)) { errorEl.textContent = 'Юзернейм: 3-20 символов (a-z, 0-9, _)'; return; }
-    if (!isValidEmail(email) && !isValidPhone(email)) { errorEl.textContent = 'Введите email или номер телефона'; return; }
-    if (!isValidPassword(password)) { errorEl.textContent = 'Пароль: минимум 6 символов'; return; }
+    if (!name) return errorEl.textContent = 'Введите имя';
+    if (!isValidUsername(username)) return errorEl.textContent = 'Юзернейм: 3-20 символов (a-z, 0-9, _)';
+    if (!isValidEmail(email) && !isValidPhone(email)) return errorEl.textContent = 'Введите email или номер телефона';
+    if (password.length < 6) return errorEl.textContent = 'Пароль: минимум 6 символов';
 
     const normalized = normalizeLogin(email);
     const users = await getUsers();
 
-    if (users.some(u => u.email === normalized)) {
-        errorEl.textContent = 'Этот email/номер уже зарегистрирован';
-        return;
-    }
-    if (users.some(u => u.username === username)) {
-        errorEl.textContent = 'Этот юзернейм уже занят';
-        return;
-    }
+    if (users.some(u => u.email === normalized)) return errorEl.textContent = 'Этот email/номер уже занят';
+    if (users.some(u => u.username === username)) return errorEl.textContent = 'Этот юзернейм занят';
 
     try {
-        const newUser = {
-            name: name,
-            username: username,
-            email: normalized,
-            password: password,
-            avatar: null,
-            created: new Date().toISOString()
-        };
-
-        await createUser(newUser);
+        await createUserInDb({ name, username, email: normalized, password, avatar: null, created: new Date().toISOString() });
         errorEl.textContent = '';
-        successEl.classList.remove('hidden');
-        successEl.textContent = '✅ Аккаунт создан! Войдите.';
-
-        document.getElementById('regName').value = '';
-        document.getElementById('regUsername').value = '';
-        document.getElementById('regEmail').value = '';
-        document.getElementById('regPassword').value = '';
-
+        document.getElementById('registerSuccess').classList.remove('hidden');
+        document.getElementById('registerSuccess').textContent = '✅ Аккаунт создан! Войдите.';
         setTimeout(() => switchTab('login'), 1500);
-    } catch (error) {
-        errorEl.textContent = 'Ошибка при создании аккаунта';
-        console.error(error);
-    }
+    } catch (e) { errorEl.textContent = 'Ошибка при создании аккаунта'; }
 }
 
 async function handleLogin() {
@@ -970,17 +639,11 @@ async function handleLogin() {
     const password = document.getElementById('loginPassword').value;
     const errorEl = document.getElementById('loginError');
 
-    if (!email) { errorEl.textContent = 'Введите email или номер'; return; }
-    if (!password) { errorEl.textContent = 'Введите пароль'; return; }
-
     const normalized = normalizeLogin(email);
     const users = await getUsers();
     const user = users.find(u => u.email === normalized && u.password === password);
 
-    if (!user) {
-        errorEl.textContent = 'Неверный email/номер или пароль';
-        return;
-    }
+    if (!user) return errorEl.textContent = 'Неверные данные для входа';
 
     currentUser = user;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
@@ -999,13 +662,9 @@ function logout() {
     document.getElementById('app').classList.add('hidden');
     document.getElementById('authPage').classList.remove('hidden');
     closeAllSettings();
-    document.getElementById('loginPassword').value = '';
 }
 
-// ============================================================
-// ЗАПУСК
-// ============================================================
-
+// ================= ИНИЦИАЛИЗАЦИЯ =================
 document.addEventListener('DOMContentLoaded', async function() {
     applyTheme();
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -1016,84 +675,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (freshUser) {
                 currentUser = freshUser;
                 showApp();
-                return;
             }
-        } catch (e) {
-            console.warn('Ошибка восстановления сессии:', e);
-        }
+        } catch (e) {}
     }
 });
-
-// ============================================================
-// НАСТРОЙКИ
-// ============================================================
-
-function openSettings() {
-    document.getElementById('settingsPanel').classList.add('open');
-    document.getElementById('settingsOverlay').classList.add('open');
-    updateSettingsProfile();
-}
-
-function closeSettings() {
-    document.getElementById('settingsPanel').classList.remove('open');
-    document.getElementById('settingsOverlay').classList.remove('open');
-}
-
-function openSettingsTheme() {
-    closeSettings();
-    document.getElementById('settingsThemePanel').classList.add('open');
-    document.getElementById('settingsOverlay').classList.add('open');
-}
-
-function closeSettingsTheme() {
-    document.getElementById('settingsThemePanel').classList.remove('open');
-    document.getElementById('settingsOverlay').classList.remove('open');
-    openSettings();
-}
-
-function openSettingsAccount() {
-    closeSettings();
-    document.getElementById('settingsAccountPanel').classList.add('open');
-    document.getElementById('settingsOverlay').classList.add('open');
-    updateAccountInfo();
-}
-
-function closeSettingsAccount() {
-    document.getElementById('settingsAccountPanel').classList.remove('open');
-    document.getElementById('settingsOverlay').classList.remove('open');
-    openSettings();
-}
-
-function closeAllSettings() {
-    document.getElementById('settingsPanel').classList.remove('open');
-    document.getElementById('settingsThemePanel').classList.remove('open');
-    document.getElementById('settingsAccountPanel').classList.remove('open');
-    document.getElementById('settingsOverlay').classList.remove('open');
-}
-
-function updateSettingsProfile() {
-    if (!currentUser) return;
-    const avatar = document.getElementById('settingsAvatar');
-    if (currentUser.avatar) {
-        avatar.innerHTML = `<img src="${currentUser.avatar}">`;
-    } else {
-        avatar.textContent = currentUser.name.charAt(0).toUpperCase();
-        avatar.style.background = 'var(--avatar-bg)';
-    }
-    document.getElementById('settingsName').textContent = currentUser.name;
-    document.getElementById('settingsUsername').textContent = '@' + currentUser.username;
-}
-
-function updateAccountInfo() {
-    if (!currentUser) return;
-    document.getElementById('accountEmail').textContent = currentUser.email || '—';
-    document.getElementById('accountName').textContent = currentUser.name || '—';
-    document.getElementById('accountUsername').textContent = '@' + currentUser.username;
-}
-
-// ============================================================
-// ОСНОВНЫЕ ФУНКЦИИ
-// ============================================================
 
 async function initApp() {
     await loadChats();
@@ -1123,7 +708,7 @@ function renderChatList() {
     list.innerHTML = '';
 
     if (!chats || chats.length === 0) {
-        list.innerHTML = '<div style="text-align:center;color:var(--text-secondary);padding:40px 20px;font-size:14px;">Нет чатов<br>Создайте группу или найдите пользователя</div>';
+        list.innerHTML = '<div style="text-align:center;color:var(--text-secondary);padding:40px 20px;font-size:14px;">Нет чатов</div>';
         return;
     }
 
@@ -1131,17 +716,9 @@ function renderChatList() {
         const item = document.createElement('div');
         const isActive = chat.id === activeChatId;
         item.className = 'chat-item' + (isActive ? ' active' : '');
-        item.onclick = function() { openChat(chat.id); };
+        item.onclick = () => openChat(chat.id);
 
-        let avatarContent;
-        if (chat.avatar) {
-            avatarContent = `<img src="${chat.avatar}">`;
-        } else if (chat.type === 'private') {
-            avatarContent = chat.name.charAt(0).toUpperCase();
-        } else {
-            avatarContent = 'Г';
-        }
-        
+        let avatarContent = chat.avatar ? `<img src="${chat.avatar}">` : (chat.type === 'private' ? chat.name.charAt(0).toUpperCase() : 'Г');
         const lastMsg = chat.lastMessage || 'Нет сообщений';
         const isPrivate = chat.type === 'private';
 
@@ -1168,20 +745,11 @@ async function openChat(chatId) {
     if (!chat) return;
 
     document.getElementById('chatTitle').textContent = chat.name;
-    document.getElementById('chatStatus').textContent = chat.type === 'private' ? 'личный чат' : 'группа, ' + (chat.members ? chat.members.length : 1) + ' участников';
-    
+    document.getElementById('chatStatus').textContent = chat.type === 'private' ? 'личный чат' : `группа, ${chat.members ? chat.members.length : 1} участников`;
     document.getElementById('chatInfoBtn').style.display = 'block';
-    
+
     const avatarDiv = document.getElementById('chatAvatar');
-    if (chat.avatar) {
-        avatarDiv.innerHTML = `<img src="${chat.avatar}">`;
-    } else if (chat.type === 'private') {
-        avatarDiv.textContent = chat.name.charAt(0).toUpperCase();
-        avatarDiv.style.background = 'var(--avatar-bg)';
-    } else {
-        avatarDiv.textContent = 'Г';
-        avatarDiv.style.background = 'var(--avatar-bg)';
-    }
+    avatarDiv.innerHTML = chat.avatar ? `<img src="${chat.avatar}">` : (chat.type === 'private' ? chat.name.charAt(0).toUpperCase() : 'Г');
 
     await loadMessages(chatId);
     renderMessages(chatId);
@@ -1189,8 +757,7 @@ async function openChat(chatId) {
     document.getElementById('msgInput').style.display = 'flex';
     updateMenuVisibility();
 
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile) {
+    if (window.innerWidth <= 768) {
         document.getElementById('sidebar').classList.add('hidden');
         document.getElementById('chatArea').classList.add('active');
     }
@@ -1204,7 +771,6 @@ function closeChat() {
     renderChatList();
     document.getElementById('chatTitle').textContent = 'Выберите чат';
     document.getElementById('chatStatus').textContent = 'онлайн';
-    document.getElementById('chatAvatar').textContent = '•';
     document.getElementById('messagesContainer').innerHTML = '';
     document.getElementById('msgInput').style.display = 'none';
     updateMenuVisibility();
@@ -1230,11 +796,7 @@ function renderMessages(chatId) {
         const isMe = msg.from === currentUser.id;
         wrapper.className = 'msg-wrap ' + (isMe ? 'out' : 'in');
         
-        let senderHtml = '';
-        if (!isMe && msg.fromName) {
-            senderHtml = `<div class="msg-sender">${msg.fromName}</div>`;
-        }
-        
+        let senderHtml = (!isMe && msg.fromName) ? `<div class="msg-sender">${msg.fromName}</div>` : '';
         wrapper.innerHTML = `
             ${senderHtml}
             <div class="msg-bubble">
@@ -1266,11 +828,8 @@ async function sendMessage() {
     renderChatList();
 }
 
-// ============================================================
-// ГРУППЫ (ИСПРАВЛЕНО)
-// ============================================================
-
-function openCreateGroup() {
+// ================= ГРУППЫ =================
+function openCreateGroupModal() {
     document.getElementById('modalCreateGroup').classList.remove('hidden');
     document.getElementById('groupName').value = '';
     document.getElementById('groupLink').value = '';
@@ -1278,26 +837,18 @@ function openCreateGroup() {
     document.getElementById('groupAvatarPreview').src = 'https://via.placeholder.com/80/7c3aed/ffffff?text=G';
     groupAvatarData = null;
     
-    // Генерируем ссылку и показываем
-    const generatedLink = 'group_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
-    document.getElementById('groupPreviewLink').textContent = generatedLink;
-    document.getElementById('groupPreviewLink').style.color = 'var(--accent)';
+    const genLink = 'group_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
+    document.getElementById('groupPreviewLink').textContent = genLink;
     
     document.getElementById('groupLink').oninput = function() {
-        const link = this.value.trim();
-        if (link) {
-            document.getElementById('groupPreviewLink').textContent = link;
-        } else {
-            const genLink = 'group_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
-            document.getElementById('groupPreviewLink').textContent = genLink;
-        }
+        document.getElementById('groupPreviewLink').textContent = this.value.trim() || genLink;
     };
 }
 
 function previewGroupAvatar(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = e => {
             document.getElementById('groupAvatarPreview').src = e.target.result;
             groupAvatarData = e.target.result;
         };
@@ -1305,35 +856,19 @@ function previewGroupAvatar(input) {
     }
 }
 
-async function createGroup() {
+async function handleCreateGroup() {
     const name = document.getElementById('groupName').value.trim();
     const link = document.getElementById('groupLink').value.trim();
     
-    if (!name) { 
-        alert('⚠️ Введите название группы'); 
-        return; 
-    }
+    if (!name) return alert('⚠️ Введите название группы');
     
-    // Если ссылка не введена - генерируем автоматически
-    let finalLink = link;
-    if (!finalLink) {
-        finalLink = 'group_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
-    }
-    
-    // Проверяем только если пользователь ввел ссылку
-    if (link && !/^[a-zA-Z0-9_]{3,20}$/.test(link)) { 
-        alert('⚠️ Ссылка: 3-20 символов (a-z, 0-9, _)'); 
-        return; 
-    }
+    let finalLink = link || ('group_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6));
 
     const groups = await getGroups();
-    if (groups.some(g => g.link === finalLink)) {
-        alert('⚠️ Эта ссылка уже занята, используйте другую');
-        return;
-    }
+    if (groups.some(g => g.link === finalLink)) return alert('⚠️ Эта ссылка уже занята');
 
     const newGroup = {
-        name: name,
+        name,
         link: finalLink,
         avatar: groupAvatarData || null,
         owner: currentUser.id,
@@ -1345,121 +880,65 @@ async function createGroup() {
     };
 
     try {
-        const created = await createGroup(newGroup);
+        const created = await createGroupInDb(newGroup);
         chats.push(created);
         closeModal('modalCreateGroup');
         renderChatList();
         openChat(created.id);
-        alert('✅ Группа "' + name + '" успешно создана!');
-    } catch (error) {
-        alert('❌ Не удалось создать группу: ' + error.message);
-        console.error(error);
-    }
+    } catch (e) { alert('❌ Ошибка создания группы: ' + e.message); }
 }
 
 async function deleteGroupById(groupId) {
-    if (!confirm('Удалить группу? Это действие необратимо!')) return;
-    
-    const group = chats.find(g => g.id === groupId);
-    if (!group) return;
-    
-    if (group.owner !== currentUser.id) {
-        alert('Только владелец может удалить группу');
-        return;
-    }
-    
+    if (!confirm('Удалить группу?')) return;
     try {
-        await deleteGroup(groupId);
+        await deleteGroupInDb(groupId);
         chats = chats.filter(g => g.id !== groupId);
-        
-        if (activeChatId === groupId) {
-            closeChat();
-        }
+        if (activeChatId === groupId) closeChat();
         renderChatList();
-        alert('✅ Группа удалена');
-    } catch (error) {
-        alert('Не удалось удалить группу');
-        console.error(error);
-    }
+    } catch (e) { alert('Не удалось удалить группу'); }
 }
 
-function deleteGroup() {
+function deleteGroupAction() {
     if (currentChatInfo) {
         deleteGroupById(currentChatInfo.id);
         closeModal('modalChatInfo');
     }
 }
 
-// ============================================================
-// ИНФОРМАЦИЯ О ЧАТЕ
-// ============================================================
-
+// ================= ИНФОРМАЦИЯ О ЧАТЕ =================
 async function openChatInfo() {
     if (!activeChatId) return;
     const chat = chats.find(c => c.id === activeChatId);
-    if (!chat) {
-        alert('Чат не найден');
-        return;
-    }
+    if (!chat) return;
     currentChatInfo = chat;
 
     document.getElementById('infoName').textContent = chat.name;
     document.getElementById('infoType').textContent = chat.type === 'private' ? 'Личный чат' : 'Группа • Владелец: ' + (chat.ownerName || '');
     document.getElementById('infoMembers').innerHTML = '<b>Участники:</b><br>' + (chat.memberNames ? chat.memberNames.join(', ') : '');
-    document.getElementById('infoLink').textContent = chat.link;
-
-    const joinSection = document.getElementById('infoJoinSection');
-    const deleteSection = document.getElementById('infoDeleteSection');
+    document.getElementById('infoLink').textContent = chat.link || '—';
 
     const isMember = chat.members && chat.members.includes(currentUser.id);
     const isOwner = chat.owner === currentUser.id;
 
-    if (!isMember && !isOwner && chat.type !== 'private') {
-        joinSection.style.display = 'block';
-        document.getElementById('joinBtn').textContent = 'Вступить в группу';
-        document.getElementById('joinBtn').className = 'join-btn';
-        document.getElementById('joinBtn').disabled = false;
-    } else {
-        joinSection.style.display = 'none';
-    }
-
-    if (isOwner && chat.type !== 'private') {
-        deleteSection.style.display = 'block';
-    } else {
-        deleteSection.style.display = 'none';
-    }
+    document.getElementById('infoJoinSection').style.display = (!isMember && !isOwner && chat.type !== 'private') ? 'block' : 'none';
+    document.getElementById('infoDeleteSection').style.display = (isOwner && chat.type !== 'private') ? 'block' : 'none';
 
     document.getElementById('modalChatInfo').classList.remove('hidden');
 }
 
 async function joinGroup() {
     if (!currentChatInfo) return;
-    const group = currentChatInfo;
-
-    if (group.members.includes(currentUser.id)) {
-        alert('Вы уже в этой группе');
-        return;
-    }
-
     try {
-        group.members.push(currentUser.id);
-        group.memberNames.push(currentUser.name);
-        await updateGroup(group.id, { members: group.members, memberNames: group.memberNames });
-        
-        alert('✅ Вы вступили в группу "' + group.name + '"');
-        document.getElementById('modalChatInfo').classList.add('hidden');
+        currentChatInfo.members.push(currentUser.id);
+        currentChatInfo.memberNames.push(currentUser.name);
+        await updateGroup(currentChatInfo.id, { members: currentChatInfo.members, memberNames: currentChatInfo.memberNames });
+        closeModal('modalChatInfo');
         await loadChats();
         renderChatList();
-    } catch (error) {
-        alert('Не удалось вступить в группу');
-        console.error(error);
-    }
+    } catch (e) { alert('Не удалось вступить в группу'); }
 }
 
-// ============================================================
-// ПОИСК ПОЛЬЗОВАТЕЛЯ
-// ============================================================
-
+// ================= ПОИСК И ЛИЧНЫЕ СООБЩЕНИЯ =================
 function openFindUser() {
     document.getElementById('modalFindUser').classList.remove('hidden');
     document.getElementById('findUserInput').value = '';
@@ -1470,8 +949,7 @@ function openFindUser() {
 async function findUser() {
     const username = document.getElementById('findUserInput').value.trim();
     const resultEl = document.getElementById('findResult');
-
-    if (!username) { resultEl.innerHTML = 'Введите юзернейм'; return; }
+    if (!username) return resultEl.innerHTML = 'Введите юзернейм';
 
     const user = await getUserByUsername(username);
 
@@ -1479,7 +957,9 @@ async function findUser() {
         foundUser = user;
         resultEl.innerHTML = `
             <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--input-bg);border-radius:12px;cursor:pointer;" onclick="openUserProfile('${user.id}')">
-                <div class="avatar" style="width:40px;height:40px;border-radius:50%;font-size:16px;background:var(--avatar-bg);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;overflow:hidden;">${user.avatar ? `<img src="${user.avatar}" style="width:100%;height:100%;object-fit:cover;">` : user.name.charAt(0).toUpperCase()}</div>
+                <div class="avatar" style="width:40px;height:40px;border-radius:50%;font-size:16px;background:var(--avatar-bg);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;overflow:hidden;">
+                    ${user.avatar ? `<img src="${user.avatar}" style="width:100%;height:100%;object-fit:cover;">` : user.name.charAt(0).toUpperCase()}
+                </div>
                 <div>
                     <div style="font-weight:600;">${user.name}</div>
                     <div style="color:var(--text-secondary);font-size:13px;">@${user.username}</div>
@@ -1490,7 +970,7 @@ async function findUser() {
     } else if (user && user.id === currentUser.id) {
         resultEl.innerHTML = '❌ Это вы сами';
     } else {
-        resultEl.innerHTML = '❌ Пользователь @' + username + ' не найден';
+        resultEl.innerHTML = '❌ Пользователь не найден';
     }
 }
 
@@ -1501,43 +981,21 @@ function openUserProfile(userId) {
     document.getElementById('userProfileName').textContent = user.name;
     document.getElementById('userProfileUsername').textContent = '@' + user.username;
     const avatar = document.getElementById('userProfileAvatar');
-    if (user.avatar) {
-        avatar.innerHTML = `<img src="${user.avatar}" style="width:100%;height:100%;object-fit:cover;">`;
-        avatar.style.background = 'none';
-    } else {
-        avatar.textContent = user.name.charAt(0).toUpperCase();
-        avatar.style.background = 'var(--avatar-bg)';
-    }
+    avatar.innerHTML = user.avatar ? `<img src="${user.avatar}" style="width:100%;height:100%;object-fit:cover;">` : user.name.charAt(0).toUpperCase();
+    
     foundUser = user;
     document.getElementById('modalUserProfile').classList.remove('hidden');
     document.getElementById('modalFindUser').classList.add('hidden');
 }
 
 function startPrivateChat() {
-    if (foundUser) {
-        startPrivateChatWith(foundUser.id);
-    } else {
-        alert('⚠️ Пользователь не выбран');
-    }
+    if (foundUser) startPrivateChatWith(foundUser.id);
 }
 
-// ============================================================
-// ЛИЧНЫЙ ЧАТ (ИСПРАВЛЕНО)
-// ============================================================
-
 async function startPrivateChatWith(userId) {
-    if (!userId) {
-        alert('⚠️ Пользователь не найден');
-        return;
-    }
-    
     const user = await getUserById(userId);
-    if (!user) {
-        alert('⚠️ Пользователь не найден');
-        return;
-    }
+    if (!user) return alert('Пользователь не найден');
 
-    // Проверяем, есть ли уже приватный чат
     const groups = await getGroups();
     let existingChat = groups.find(g => 
         g.type === 'private' && 
@@ -1546,16 +1004,16 @@ async function startPrivateChatWith(userId) {
         g.members.includes(userId)
     );
 
+    closeModal('modalUserProfile');
+    closeModal('modalFindUser');
+
     if (existingChat) {
-        closeModal('modalUserProfile');
-        closeModal('modalFindUser');
         await loadChats();
         renderChatList();
         openChat(existingChat.id);
         return;
     }
 
-    // Создаём новый приватный чат
     const newGroup = {
         name: user.name,
         type: 'private',
@@ -1570,39 +1028,59 @@ async function startPrivateChatWith(userId) {
     };
 
     try {
-        const created = await createGroup(newGroup);
+        const created = await createGroupInDb(newGroup);
         chats.push(created);
-        closeModal('modalUserProfile');
-        closeModal('modalFindUser');
         renderChatList();
         openChat(created.id);
-        alert('✅ Чат с ' + user.name + ' создан!');
-    } catch (e) {
-        console.error('Ошибка создания чата:', e);
-        alert('❌ Не удалось создать чат: ' + e.message);
-    }
+    } catch (e) { alert('Не удалось создать чат'); }
 }
 
-// ============================================================
-// ОБНОВЛЕНИЕ ЧАТОВ
-// ============================================================
-
-async function refreshChats() {
-    await loadChats();
-    renderChatList();
-    if (activeChatId) {
-        const chat = chats.find(c => c.id === activeChatId);
-        if (chat) {
-            await loadMessages(activeChatId);
-            renderMessages(activeChatId);
-        }
-    }
-    alert('✅ Чаты обновлены!');
+// ================= ВСПУХАЮЩИЕ НАСТРОЙКИ И МЕНЮ =================
+function openSettings() {
+    document.getElementById('settingsPanel').classList.add('open');
+    document.getElementById('settingsOverlay').classList.add('open');
+    updateSettingsProfile();
+}
+function closeAllSettings() {
+    document.getElementById('settingsPanel').classList.remove('open');
+    document.getElementById('settingsThemePanel').classList.remove('open');
+    document.getElementById('settingsAccountPanel').classList.remove('open');
+    document.getElementById('settingsOverlay').classList.remove('open');
+}
+function openSettingsTheme() {
+    closeAllSettings();
+    document.getElementById('settingsThemePanel').classList.add('open');
+    document.getElementById('settingsOverlay').classList.add('open');
+}
+function closeSettingsTheme() {
+    closeAllSettings();
+    openSettings();
+}
+function openSettingsAccount() {
+    closeAllSettings();
+    document.getElementById('settingsAccountPanel').classList.add('open');
+    document.getElementById('settingsOverlay').classList.add('open');
+    updateAccountInfo();
+}
+function closeSettingsAccount() {
+    closeAllSettings();
+    openSettings();
 }
 
-// ============================================================
-// ОБЩИЕ ФУНКЦИИ
-// ============================================================
+function updateSettingsProfile() {
+    if (!currentUser) return;
+    const avatar = document.getElementById('settingsAvatar');
+    avatar.innerHTML = currentUser.avatar ? `<img src="${currentUser.avatar}">` : currentUser.name.charAt(0).toUpperCase();
+    document.getElementById('settingsName').textContent = currentUser.name;
+    document.getElementById('settingsUsername').textContent = '@' + currentUser.username;
+}
+
+function updateAccountInfo() {
+    if (!currentUser) return;
+    document.getElementById('accountEmail').textContent = currentUser.email || '—';
+    document.getElementById('accountName').textContent = currentUser.name || '—';
+    document.getElementById('accountUsername').textContent = '@' + currentUser.username;
+}
 
 function toggleMenu() {
     document.getElementById('menuOverlay').classList.toggle('open');
@@ -1610,8 +1088,7 @@ function toggleMenu() {
 
 function filterChats() {
     const query = document.getElementById('searchInput').value.toLowerCase();
-    const items = document.querySelectorAll('.chat-item');
-    items.forEach(item => {
+    document.querySelectorAll('.chat-item').forEach(item => {
         const name = item.querySelector('.chat-name')?.textContent.toLowerCase() || '';
         item.style.display = name.includes(query) ? 'flex' : 'none';
     });
@@ -1623,34 +1100,32 @@ function closeModal(id) {
 
 function updateMenuVisibility() {
     const menuBtn = document.getElementById('menuBtn');
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile && activeChatId !== null) {
-        menuBtn.classList.add('hidden');
-    } else {
-        menuBtn.classList.remove('hidden');
-    }
+    menuBtn.classList.toggle('hidden', window.innerWidth <= 768 && activeChatId !== null);
 }
 
 function listenMessages() {
-    db.collection('messages')
-        .orderBy('timestamp', 'asc')
-        .onSnapshot(async (snapshot) => {
-            if (!activeChatId) return;
-            await loadMessages(activeChatId);
-            renderMessages(activeChatId);
-        });
+    db.collection('messages').orderBy('timestamp', 'asc').onSnapshot(async () => {
+        if (!activeChatId) return;
+        await loadMessages(activeChatId);
+        renderMessages(activeChatId);
+    });
 }
 
-// ============================================================
-// ПРОФИЛЬ
-// ============================================================
+async function refreshChats() {
+    await loadChats();
+    renderChatList();
+    if (activeChatId) {
+        await loadMessages(activeChatId);
+        renderMessages(activeChatId);
+    }
+}
 
+// ================= РЕДАКТИРОВАНИЕ ПРОФИЛЯ =================
 function openEditProfile() {
     if (!currentUser) return;
     document.getElementById('editName').value = currentUser.name;
     document.getElementById('editUsername').value = currentUser.username;
-    document.getElementById('profileAvatarPreview').src = currentUser.avatar || 
-        `https://via.placeholder.com/80/7c3aed/ffffff?text=${currentUser.name.charAt(0).toUpperCase()}`;
+    document.getElementById('profileAvatarPreview').src = currentUser.avatar || `https://via.placeholder.com/80/7c3aed/ffffff?text=${currentUser.name.charAt(0).toUpperCase()}`;
     document.getElementById('modalProfile').classList.remove('hidden');
     closeAllSettings();
 }
@@ -1658,9 +1133,7 @@ function openEditProfile() {
 function previewAvatar(input) {
     if (input.files && input.files[0]) {
         const reader = new FileReader();
-        reader.onload = (e) => {
-            document.getElementById('profileAvatarPreview').src = e.target.result;
-        };
+        reader.onload = e => document.getElementById('profileAvatarPreview').src = e.target.result;
         reader.readAsDataURL(input.files[0]);
     }
 }
@@ -1670,62 +1143,49 @@ async function saveProfile() {
     const username = document.getElementById('editUsername').value.trim();
     const avatarFile = document.getElementById('editAvatarFile').files[0];
 
-    if (!name) { alert('Введите имя'); return; }
-    if (!isValidUsername(username)) { alert('Юзернейм: 3-20 символов (a-z, 0-9, _)'); return; }
+    if (!name || !isValidUsername(username)) return alert('Проверьте введенные данные');
 
     const users = await getUsers();
-    const otherUsers = users.filter(u => u.id !== currentUser.id);
-    if (otherUsers.some(u => u.username === username)) {
-        alert('Этот юзернейм уже занят');
-        return;
+    if (users.filter(u => u.id !== currentUser.id).some(u => u.username === username)) {
+        return alert('Этот юзернейм уже занят');
     }
 
     currentUser.name = name;
     currentUser.username = username;
 
-    try {
-        if (avatarFile) {
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                currentUser.avatar = e.target.result;
-                await updateUser(currentUser.id, { name: name, username: username, avatar: currentUser.avatar });
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
-                updateProfile();
-                closeModal('modalProfile');
-                renderChatList();
-            };
-            reader.readAsDataURL(avatarFile);
-        } else {
-            await updateUser(currentUser.id, { name: name, username: username });
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
-            updateProfile();
-            closeModal('modalProfile');
-            renderChatList();
-        }
-    } catch (error) {
-        alert('Не удалось сохранить изменения');
-        console.error(error);
+    const finalize = async () => {
+        await updateUser(currentUser.id, { name: currentUser.name, username: currentUser.username, avatar: currentUser.avatar || null });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
+        updateProfile();
+        closeModal('modalProfile');
+        renderChatList();
+    };
+
+    if (avatarFile) {
+        const reader = new FileReader();
+        reader.onload = async e => {
+            currentUser.avatar = e.target.result;
+            await finalize();
+        };
+        reader.readAsDataURL(avatarFile);
+    } else {
+        await finalize();
     }
 }
 
-// Закрытие модалок по клику на оверлей
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', (e) => {
+    overlay.addEventListener('click', e => {
         if (e.target === overlay) overlay.classList.add('hidden');
     });
 });
 
-window.addEventListener('resize', function() {
-    const isMobile = window.innerWidth <= 768;
-    if (!isMobile) {
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
         document.getElementById('sidebar').classList.remove('hidden');
         document.getElementById('chatArea').classList.remove('active');
     }
     updateMenuVisibility();
 });
-
-console.log('💬 musezzy загружен!');
-console.log('🔥 Данные в Firebase!');
 </script>
 </body>
 </html>
