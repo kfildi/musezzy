@@ -644,7 +644,7 @@
         <h3>Создать группу</h3>
         <img id="groupAvatarPreview" class="avatar-preview" src="https://via.placeholder.com/80/7c3aed/ffffff?text=G" alt="Аватар">
         <input type="text" id="groupName" placeholder="Название группы">
-        <input type="text" id="groupLink" placeholder="Ссылка (например: mygroup)">
+        <input type="text" id="groupLink" placeholder="Ссылка (необязательно)">
         <input type="file" id="groupAvatarFile" accept="image/*" onchange="previewGroupAvatar(this)">
         <div style="font-size:13px;color:var(--text-secondary);text-align:center;margin-bottom:12px;">
             Ссылка: <span id="groupPreviewLink" style="color:var(--accent);"></span>
@@ -1191,7 +1191,6 @@ async function openChat(chatId) {
     document.getElementById('chatTitle').textContent = chat.name;
     document.getElementById('chatStatus').textContent = chat.type === 'private' ? 'личный чат' : 'группа, ' + (chat.members ? chat.members.length : 1) + ' участников';
     
-    // Показываем кнопку информации о чате
     document.getElementById('chatInfoBtn').style.display = 'block';
     
     const avatarDiv = document.getElementById('chatAvatar');
@@ -1289,7 +1288,7 @@ async function sendMessage() {
 }
 
 // ============================================================
-// ГРУППЫ
+// ГРУППЫ (ИСПРАВЛЕНО)
 // ============================================================
 
 function openCreateGroup() {
@@ -1306,7 +1305,7 @@ function openCreateGroup() {
         if (link) {
             document.getElementById('groupPreviewLink').textContent = link;
         } else {
-            document.getElementById('groupPreviewLink').textContent = '';
+            document.getElementById('groupPreviewLink').textContent = 'будет сгенерирована автоматически';
         }
     };
 }
@@ -1326,19 +1325,32 @@ async function createGroup() {
     const name = document.getElementById('groupName').value.trim();
     const link = document.getElementById('groupLink').value.trim();
     
-    if (!name) { alert('Введите название группы'); return; }
-    if (!link) { alert('Введите ссылку на группу'); return; }
-    if (!/^[a-zA-Z0-9_]{3,20}$/.test(link)) { alert('Ссылка: 3-20 символов (a-z, 0-9, _)'); return; }
+    if (!name) { 
+        alert('Введите название группы'); 
+        return; 
+    }
+    
+    // Если ссылка не введена - генерируем автоматически
+    let finalLink = link;
+    if (!finalLink) {
+        finalLink = 'group_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6);
+    }
+    
+    // Проверяем только если пользователь ввел ссылку
+    if (link && !/^[a-zA-Z0-9_]{3,20}$/.test(link)) { 
+        alert('Ссылка: 3-20 символов (a-z, 0-9, _)'); 
+        return; 
+    }
 
     const groups = await getGroups();
-    if (groups.some(g => g.link === link)) {
-        alert('Эта ссылка уже занята');
+    if (groups.some(g => g.link === finalLink)) {
+        alert('Эта ссылка уже занята, используйте другую');
         return;
     }
 
     const newGroup = {
         name: name,
-        link: link,
+        link: finalLink,
         avatar: groupAvatarData || null,
         owner: currentUser.id,
         ownerName: currentUser.name,
@@ -1355,7 +1367,7 @@ async function createGroup() {
         renderChatList();
         openChat(created.id);
     } catch (error) {
-        alert('Не удалось создать группу');
+        alert('Не удалось создать группу: ' + error.message);
         console.error(error);
     }
 }
@@ -1522,7 +1534,16 @@ function startPrivateChat() {
     }
 }
 
+// ============================================================
+// ЛИЧНЫЙ ЧАТ (ИСПРАВЛЕНО - БЕЗ ЗАПРОСА НАЗВАНИЯ)
+// ============================================================
+
 async function startPrivateChatWith(userId) {
+    if (!userId) {
+        alert('Пользователь не найден');
+        return;
+    }
+    
     const user = await getUserById(userId);
     if (!user) {
         alert('Пользователь не найден');
@@ -1541,7 +1562,6 @@ async function startPrivateChatWith(userId) {
     if (existingChat) {
         closeModal('modalUserProfile');
         closeModal('modalFindUser');
-        // Обновляем список чатов и открываем существующий
         await loadChats();
         renderChatList();
         openChat(existingChat.id);
@@ -1552,7 +1572,7 @@ async function startPrivateChatWith(userId) {
     const newGroup = {
         name: user.name,
         type: 'private',
-        link: 'private_' + Date.now(),
+        link: 'private_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
         avatar: user.avatar || null,
         owner: currentUser.id,
         ownerName: currentUser.name,
@@ -1571,7 +1591,7 @@ async function startPrivateChatWith(userId) {
         openChat(created.id);
     } catch (e) {
         console.error('Ошибка создания чата:', e);
-        alert('Не удалось создать чат');
+        alert('Не удалось создать чат: ' + e.message);
     }
 }
 
