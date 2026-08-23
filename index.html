@@ -23,6 +23,7 @@
             --active-bg: #e0e7ff;
             --danger: #ef4444;
             --danger-hover: #dc2626;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         body.dark {
             --bg: #0f0f1a;
@@ -51,10 +52,12 @@
         .auth-page {
             width: 100%; min-height: 100vh; display: flex; align-items: center; justify-content: center;
             background: var(--bg); padding: 20px; transition: background 0.3s;
+            animation: fadeIn 0.5s ease;
         }
         .auth-card {
             background: var(--card); border-radius: var(--radius); padding: 40px;
             width: 420px; max-width: 100%; box-shadow: var(--shadow); transition: background 0.3s;
+            animation: slideUp 0.5s ease;
         }
         .auth-logo { font-size: 48px; text-align: center; margin-bottom: 4px; }
         .auth-card h1 { text-align: center; font-size: 28px; font-weight: 800; color: var(--text); }
@@ -76,7 +79,7 @@
 
         /* ПРИЛОЖЕНИЕ */
         .app { display: flex; width: 100%; height: 100vh; max-width: 1400px; background: var(--bg); overflow: hidden; transition: background 0.3s; }
-        .sidebar { width: 360px; min-width: 300px; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; transition: background 0.3s; }
+        .sidebar { width: 360px; min-width: 300px; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; transition: background 0.3s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; z-index: 2; }
         .sidebar-header { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
         .sidebar-title { font-size: 20px; font-weight: 700; color: var(--text); }
         .settings-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-secondary); padding: 4px 8px; border-radius: 8px; transition: 0.2s; }
@@ -85,27 +88,29 @@
         .search-bar { padding: 12px 20px; border-bottom: 1px solid var(--border); }
         .search-bar input { width: 100%; padding: 10px 16px; border-radius: 24px; border: 1px solid var(--border); outline: none; font-size: 14px; background: var(--input-bg); color: var(--text); }
 
-        .chat-list { flex: 1; overflow-y: auto; padding: 8px 0; }
+        .chat-list { flex: 1; overflow-y: auto; padding: 8px 0; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
         .chat-item { display: flex; align-items: center; gap: 14px; padding: 12px 20px; cursor: pointer; transition: 0.15s; border-left: 3px solid transparent; color: var(--text); }
         .chat-item:hover { background: var(--hover-bg); }
         .chat-item.active { background: var(--active-bg); border-left-color: var(--accent); }
-        .chat-item .avatar { width: 48px; height: 48px; font-size: 18px; }
+        .chat-item .avatar { width: 48px; height: 48px; border-radius: 50%; font-size: 18px; flex-shrink: 0; background: var(--avatar-bg); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; overflow: hidden; }
+        .chat-item .avatar img { width: 100%; height: 100%; object-fit: cover; }
         .chat-info { flex: 1; min-width: 0; }
         .chat-name { font-weight: 600; font-size: 15px; }
         .chat-last { color: var(--text-secondary); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .chat-delete { background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 16px; padding: 4px 8px; border-radius: 8px; transition: 0.2s; }
         .chat-delete:hover { background: var(--danger); color: white; }
 
-        .chat-area { flex: 1; display: flex; flex-direction: column; background: var(--bg); height: 100vh; transition: background 0.3s; }
+        .chat-area { flex: 1; display: flex; flex-direction: column; background: var(--bg); height: 100vh; transition: background 0.3s; position: relative; z-index: 1; }
         .chat-header { padding: 14px 24px; background: var(--card); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; }
-        .chat-header .avatar { width: 42px; height: 42px; font-size: 16px; }
+        .chat-header .avatar { width: 42px; height: 42px; border-radius: 50%; font-size: 16px; flex-shrink: 0; background: var(--avatar-bg); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; overflow: hidden; }
+        .chat-header .avatar img { width: 100%; height: 100%; object-fit: cover; }
         .chat-header-info { flex: 1; }
         .chat-header-name { font-weight: 600; font-size: 16px; }
         .chat-header-status { color: var(--text-secondary); font-size: 13px; }
         .back-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text); display: none; padding: 4px 8px; }
 
-        .messages { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 4px; }
-        .msg-wrap { display: flex; flex-direction: column; max-width: 70%; }
+        .messages { flex: 1; overflow-y: auto; padding: 20px 24px; display: flex; flex-direction: column; gap: 4px; animation: fadeIn 0.3s ease; }
+        .msg-wrap { display: flex; flex-direction: column; max-width: 70%; animation: slideInMsg 0.3s ease; }
         .msg-wrap.in { align-self: flex-start; }
         .msg-wrap.out { align-self: flex-end; }
         .msg-sender { font-size: 12px; color: var(--text-secondary); margin-bottom: 2px; padding-left: 12px; }
@@ -114,41 +119,47 @@
         .msg-wrap.out .msg-bubble { background: var(--bubble-out); border-bottom-right-radius: 6px; }
         .msg-time { display: block; font-size: 10px; color: var(--text-secondary); text-align: right; margin-top: 4px; }
 
-        .msg-input { display: flex; align-items: center; padding: 14px 24px; background: var(--card); gap: 12px; border-top: 1px solid var(--border); }
+        .msg-input { display: flex; align-items: center; padding: 14px 24px; background: var(--card); gap: 12px; border-top: 1px solid var(--border); animation: slideUp 0.3s ease; }
         .msg-input input { flex: 1; padding: 12px 20px; border-radius: 28px; border: 1px solid var(--border); outline: none; font-size: 14px; background: var(--input-bg); color: var(--text); }
         .msg-input input:focus { border-color: var(--accent); }
         .msg-input button { background: var(--accent); border: none; width: 46px; height: 46px; border-radius: 50%; color: white; font-size: 18px; cursor: pointer; transition: 0.2s; }
-        .msg-input button:hover { background: var(--accent-hover); }
+        .msg-input button:hover { background: var(--accent-hover); transform: scale(1.05); }
 
-        .menu-btn { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 16px; background: var(--accent); color: white; border: none; font-size: 26px; cursor: pointer; z-index: 15; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: 0.2s; }
+        .menu-btn { position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px; border-radius: 16px; background: var(--accent); color: white; border: none; font-size: 26px; cursor: pointer; z-index: 15; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transition: 0.2s; animation: pulse 2s infinite; }
         .menu-btn:hover { transform: scale(1.05); }
         .menu-btn.hidden { display: none; }
 
-        .menu-overlay { position: fixed; top: 0; right: -100%; width: 300px; max-width: 80vw; height: 100%; background: var(--card); z-index: 16; transition: 0.3s ease; box-shadow: -4px 0 30px rgba(0,0,0,0.1); padding: 30px 20px; border-left: 1px solid var(--border); }
+        .menu-overlay { position: fixed; top: 0; right: -100%; width: 300px; max-width: 80vw; height: 100%; background: var(--card); z-index: 16; transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: -4px 0 30px rgba(0,0,0,0.1); padding: 30px 20px; border-left: 1px solid var(--border); }
         .menu-overlay.open { right: 0; }
-        .menu-overlay .close { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text); align-self: flex-end; }
+        .menu-overlay .close { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text); align-self: flex-end; padding: 4px 8px; border-radius: 8px; transition: 0.2s; }
+        .menu-overlay .close:hover { background: var(--hover-bg); }
         .menu-overlay .title { font-size: 20px; font-weight: 700; margin: 10px 0 24px; color: var(--text); }
         .menu-item { width: 100%; padding: 14px 18px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); cursor: pointer; text-align: left; font-size: 15px; font-weight: 500; color: var(--text); margin-bottom: 10px; transition: 0.2s; }
-        .menu-item:hover { border-color: var(--accent); background: var(--hover-bg); color: var(--accent); }
+        .menu-item:hover { border-color: var(--accent); background: var(--hover-bg); color: var(--accent); transform: translateX(4px); }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 20; backdrop-filter: blur(4px); }
-        .modal { background: var(--card); border-radius: var(--radius); padding: 32px; width: 420px; max-width: 92vw; max-height: 90vh; overflow-y: auto; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 20; backdrop-filter: blur(4px); animation: fadeIn 0.3s ease; }
+        .modal { background: var(--card); border-radius: var(--radius); padding: 32px; width: 420px; max-width: 92vw; max-height: 90vh; overflow-y: auto; animation: scaleIn 0.3s ease; }
         .modal h3 { text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 20px; }
         .modal input { width: 100%; padding: 12px 16px; border: 2px solid var(--border); border-radius: 12px; font-size: 14px; outline: none; background: var(--input-bg); color: var(--text); margin-bottom: 12px; }
         .modal input:focus { border-color: var(--accent); background: var(--card); }
         .modal-actions { display: flex; gap: 10px; margin-top: 12px; }
-        .modal-actions button { flex: 1; padding: 12px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; }
+        .modal-actions button { flex: 1; padding: 12px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; }
         .btn-primary { background: var(--accent); color: white; }
-        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-primary:hover { background: var(--accent-hover); transform: scale(1.02); }
         .btn-secondary { background: var(--input-bg); color: var(--text); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: var(--hover-bg); }
         .btn-danger { background: var(--danger); color: white; }
-        .btn-danger:hover { background: var(--danger-hover); }
+        .btn-danger:hover { background: var(--danger-hover); transform: scale(1.02); }
 
         .avatar-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin: 0 auto 16px; display: block; }
-        .join-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--accent); color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 12px; }
+        .join-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; background: var(--accent); color: white; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 12px; transition: 0.2s; }
+        .join-btn:hover { transform: scale(1.02); }
         .join-btn.joined { background: var(--text-secondary); cursor: default; }
+        .join-btn.joined:hover { transform: none; }
+
         .profile-actions { display: flex; gap: 10px; margin-top: 12px; }
-        .profile-actions button { flex: 1; padding: 10px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; }
+        .profile-actions button { flex: 1; padding: 10px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; }
+        .profile-actions button:hover { transform: scale(1.02); }
 
         /* ===== НАСТРОЙКИ ===== */
         .settings-panel {
@@ -160,7 +171,7 @@
             background: var(--card);
             border-right: 1px solid var(--border);
             z-index: 10;
-            transition: 0.3s ease;
+            transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
             box-shadow: 2px 0 30px rgba(0,0,0,0.06);
@@ -182,11 +193,11 @@
             font-size: 20px;
             cursor: pointer;
             color: var(--text-secondary);
-            padding: 4px;
+            padding: 4px 8px;
             border-radius: 8px;
             transition: 0.2s;
         }
-        .settings-header .back:hover { background: var(--hover-bg); }
+        .settings-header .back:hover { background: var(--hover-bg); transform: scale(1.1); }
         .settings-header h3 {
             font-size: 18px;
             font-weight: 700;
@@ -202,7 +213,7 @@
             border-radius: 8px;
             transition: 0.2s;
         }
-        .settings-close:hover { background: var(--hover-bg); }
+        .settings-close:hover { background: var(--hover-bg); transform: rotate(90deg); }
 
         .settings-content {
             flex: 1;
@@ -211,6 +222,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            animation: slideIn 0.3s ease;
         }
 
         /* Профиль в настройках (по центру) */
@@ -221,15 +233,28 @@
             padding: 20px 0 16px;
             border-bottom: 1px solid var(--border);
             margin-bottom: 16px;
-        }
-        .settings-profile .avatar {
-            width: 72px;
-            height: 72px;
-            font-size: 28px;
             cursor: pointer;
             transition: 0.2s;
         }
-        .settings-profile .avatar:hover { opacity: 0.8; transform: scale(1.02); }
+        .settings-profile:hover { opacity: 0.8; }
+        .settings-profile .avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            font-size: 28px;
+            flex-shrink: 0;
+            background: var(--avatar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            overflow: hidden;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .settings-profile .avatar:hover { transform: scale(1.05); }
+        .settings-profile .avatar img { width: 100%; height: 100%; object-fit: cover; }
         .settings-profile .name {
             font-size: 18px;
             font-weight: 600;
@@ -256,8 +281,9 @@
             justify-content: space-between;
             align-items: center;
         }
-        .settings-btn-item:hover { background: var(--hover-bg); color: var(--accent); }
-        .settings-btn-item .arrow { color: var(--text-secondary); font-size: 18px; }
+        .settings-btn-item:hover { background: var(--hover-bg); color: var(--accent); transform: translateX(4px); }
+        .settings-btn-item .arrow { color: var(--text-secondary); font-size: 18px; transition: 0.2s; }
+        .settings-btn-item:hover .arrow { transform: translateX(4px); color: var(--accent); }
 
         .settings-logout {
             width: 100%;
@@ -272,7 +298,7 @@
             transition: 0.2s;
             margin-top: auto;
         }
-        .settings-logout:hover { background: #ef4444; color: white; }
+        .settings-logout:hover { background: #ef4444; color: white; transform: scale(1.02); }
 
         /* ===== АККАУНТ (внутреннее окно) ===== */
         .account-info {
@@ -280,6 +306,7 @@
             flex-direction: column;
             gap: 16px;
             padding-top: 8px;
+            animation: slideUp 0.3s ease;
         }
         .account-info .row {
             display: flex;
@@ -288,7 +315,9 @@
             padding: 12px 16px;
             background: var(--input-bg);
             border-radius: 12px;
+            transition: 0.2s;
         }
+        .account-info .row:hover { transform: translateX(4px); }
         .account-info .row .label {
             font-size: 12px;
             color: var(--text-secondary);
@@ -307,6 +336,7 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin-top: 4px;
+            animation: fadeIn 0.3s ease;
         }
         .theme-option {
             padding: 12px 8px;
@@ -317,7 +347,7 @@
             transition: 0.3s;
             background: var(--input-bg);
         }
-        .theme-option:hover { border-color: var(--accent); }
+        .theme-option:hover { border-color: var(--accent); transform: scale(1.05); }
         .theme-option.active { border-color: var(--accent); background: var(--active-bg); }
         .theme-option .preview {
             width: 32px;
@@ -340,12 +370,54 @@
             font-size: 14px;
             transition: 0.2s;
             margin-top: 12px;
+            animation: fadeIn 0.5s ease;
         }
-        .theme-dark-toggle:hover { border-color: var(--accent); background: var(--hover-bg); }
+        .theme-dark-toggle:hover { border-color: var(--accent); background: var(--hover-bg); transform: scale(1.02); }
+
+        /* ===== АНИМАЦИИ ===== */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInMsg {
+            from { opacity: 0; transform: translateY(10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        /* ===== СВАЙП-ИНДИКАТОР ===== */
+        .swipe-indicator {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 0 4px 4px 0;
+            opacity: 0.3;
+            pointer-events: none;
+            transition: 0.3s;
+        }
 
         /* АДАПТИВ */
         @media (max-width: 768px) {
-            .sidebar { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; transition: transform 0.3s; }
+            .sidebar { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
             .sidebar.hidden { transform: translateX(-100%); }
             .chat-area { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
             .chat-area.active { z-index: 3; }
@@ -421,6 +493,7 @@
         </div>
 
         <div class="chat-list" id="chatList"></div>
+        <div class="swipe-indicator"></div>
     </div>
 
     <!-- ЧАТ -->
@@ -448,7 +521,7 @@
         </div>
         <div class="settings-content">
             <!-- Профиль по центру -->
-            <div class="settings-profile" onclick="openSettingsAccount()">
+            <div class="settings-profile" onclick="openEditProfile()">
                 <div class="avatar" id="settingsAvatar">A</div>
                 <div class="name" id="settingsName">Мой профиль</div>
                 <div class="username" id="settingsUsername">@username</div>
@@ -563,7 +636,7 @@
     <div class="modal">
         <h3 id="userProfileName"></h3>
         <div style="text-align:center;margin-bottom:16px;">
-            <div class="avatar" id="userProfileAvatar" style="width:80px;height:80px;font-size:32px;margin:0 auto;">U</div>
+            <div class="avatar" id="userProfileAvatar" style="width:80px;height:80px;border-radius:50%;font-size:32px;margin:0 auto;background:var(--avatar-bg);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;overflow:hidden;">U</div>
             <div style="margin-top:8px;font-size:14px;color:var(--text-secondary);" id="userProfileUsername">@username</div>
         </div>
         <div class="profile-actions">
@@ -755,6 +828,9 @@ function getDarkMode() {
 function setTheme(theme) {
     localStorage.setItem(THEME_KEY, theme);
     applyTheme();
+    document.querySelectorAll('.theme-option').forEach(el => {
+        el.classList.toggle('active', el.dataset.theme === theme);
+    });
 }
 
 function toggleDarkMode() {
@@ -916,6 +992,26 @@ document.addEventListener('DOMContentLoaded', async function() {
         } catch (e) {}
     }
 });
+
+// ============================================================
+// СВАЙП (открытие настроек)
+// ============================================================
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.getElementById('chatList').addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+document.getElementById('chatList').addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    // Если свайп слева направо (отрицательная разница) и достаточно большой
+    if (diff < -80 && touchStartX < 60) {
+        openSettings();
+    }
+}, { passive: true });
 
 // ============================================================
 // НАСТРОЙКИ
@@ -1250,7 +1346,7 @@ async function findUser() {
         foundUser = user;
         resultEl.innerHTML = `
             <div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--input-bg);border-radius:12px;cursor:pointer;" onclick="openUserProfile('${user.id}')">
-                <div class="avatar" style="width:40px;height:40px;font-size:16px;">${user.avatar ? `<img src="${user.avatar}">` : user.name.charAt(0).toUpperCase()}</div>
+                <div class="avatar" style="width:40px;height:40px;border-radius:50%;font-size:16px;background:var(--avatar-bg);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;overflow:hidden;">${user.avatar ? `<img src="${user.avatar}" style="width:100%;height:100%;object-fit:cover;">` : user.name.charAt(0).toUpperCase()}</div>
                 <div>
                     <div style="font-weight:600;">${user.name}</div>
                     <div style="color:var(--text-secondary);font-size:13px;">@${user.username}</div>
@@ -1274,6 +1370,7 @@ function openUserProfile(userId) {
     const avatar = document.getElementById('userProfileAvatar');
     if (user.avatar) {
         avatar.innerHTML = `<img src="${user.avatar}" style="width:100%;height:100%;object-fit:cover;">`;
+        avatar.style.background = 'none';
     } else {
         avatar.textContent = user.name.charAt(0).toUpperCase();
         avatar.style.background = 'var(--avatar-bg)';
