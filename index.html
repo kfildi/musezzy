@@ -78,7 +78,7 @@
         .auth-success { color: #22c55e; font-size: 13px; margin-top: 8px; text-align: center; }
 
         /* ПРИЛОЖЕНИЕ */
-        .app { display: flex; width: 100%; height: 100vh; max-width: 1400px; background: var(--bg); overflow: hidden; transition: background 0.3s; }
+        .app { display: flex; width: 100%; height: 100vh; max-width: 1400px; background: var(--bg); overflow: hidden; transition: background 0.3s; position: relative; }
         .sidebar { width: 360px; min-width: 300px; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; transition: background 0.3s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; z-index: 2; }
         .sidebar-header { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
         .sidebar-title { font-size: 20px; font-weight: 700; color: var(--text); }
@@ -161,88 +161,92 @@
         .profile-actions button { flex: 1; padding: 10px; border-radius: 12px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; }
         .profile-actions button:hover { transform: scale(1.02); }
 
-        /* ===== НАСТРОЙКИ ===== */
+        /* ===== НАСТРОЙКИ (упрощённые) ===== */
+        .settings-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            z-index: 5;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(2px);
+        }
+        .settings-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         .settings-panel {
             position: absolute;
             top: 0;
-            left: -380px;
-            width: 360px;
+            left: -100%;
+            width: 380px;
+            max-width: 85vw;
             height: 100%;
             background: var(--card);
-            border-right: 1px solid var(--border);
             z-index: 10;
             transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            box-shadow: 2px 0 30px rgba(0,0,0,0.06);
+            box-shadow: 4px 0 30px rgba(0,0,0,0.15);
+            border-right: 1px solid var(--border);
         }
-        .settings-panel.open { left: 0; }
-        .settings-panel.secondary { left: -760px; }
-        .settings-panel.secondary.open { left: -380px; }
-
-        .settings-header {
+        .settings-panel.open {
+            left: 0;
+        }
+        .settings-panel .panel-header {
             padding: 20px 24px;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
-            gap: 12px;
+            justify-content: space-between;
         }
-        .settings-header .back {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--text-secondary);
-            padding: 4px 8px;
-            border-radius: 8px;
-            transition: 0.2s;
-        }
-        .settings-header .back:hover { background: var(--hover-bg); transform: scale(1.1); }
-        .settings-header h3 {
+        .settings-panel .panel-header h3 {
             font-size: 18px;
             font-weight: 700;
-            flex: 1;
         }
-        .settings-close {
+        .settings-panel .panel-close {
             background: none;
             border: none;
-            font-size: 22px;
+            font-size: 24px;
             cursor: pointer;
             color: var(--text-secondary);
             padding: 4px 8px;
             border-radius: 8px;
             transition: 0.2s;
         }
-        .settings-close:hover { background: var(--hover-bg); transform: rotate(90deg); }
-
-        .settings-content {
+        .settings-panel .panel-close:hover {
+            background: var(--hover-bg);
+            transform: rotate(90deg);
+        }
+        .settings-panel .panel-body {
             flex: 1;
             overflow-y: auto;
-            padding: 20px 24px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            animation: slideIn 0.3s ease;
+            gap: 12px;
         }
 
-        /* Профиль в настройках (по центру) */
+        /* Профиль в настройках */
         .settings-profile {
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px 0 16px;
             border-bottom: 1px solid var(--border);
-            margin-bottom: 16px;
+            margin-bottom: 8px;
             cursor: pointer;
-            transition: 0.2s;
         }
-        .settings-profile:hover { opacity: 0.8; }
         .settings-profile .avatar {
             width: 72px;
             height: 72px;
             border-radius: 50%;
             font-size: 28px;
-            flex-shrink: 0;
             background: var(--avatar-bg);
             display: flex;
             align-items: center;
@@ -282,8 +286,7 @@
             align-items: center;
         }
         .settings-btn-item:hover { background: var(--hover-bg); color: var(--accent); transform: translateX(4px); }
-        .settings-btn-item .arrow { color: var(--text-secondary); font-size: 18px; transition: 0.2s; }
-        .settings-btn-item:hover .arrow { transform: translateX(4px); color: var(--accent); }
+        .settings-btn-item .arrow { color: var(--text-secondary); font-size: 18px; }
 
         .settings-logout {
             width: 100%;
@@ -300,13 +303,11 @@
         }
         .settings-logout:hover { background: #ef4444; color: white; transform: scale(1.02); }
 
-        /* ===== АККАУНТ (внутреннее окно) ===== */
+        /* ===== АККАУНТ (внутри панели) ===== */
         .account-info {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            padding-top: 8px;
-            animation: slideUp 0.3s ease;
+            gap: 12px;
         }
         .account-info .row {
             display: flex;
@@ -315,9 +316,7 @@
             padding: 12px 16px;
             background: var(--input-bg);
             border-radius: 12px;
-            transition: 0.2s;
         }
-        .account-info .row:hover { transform: translateX(4px); }
         .account-info .row .label {
             font-size: 12px;
             color: var(--text-secondary);
@@ -335,8 +334,6 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
-            margin-top: 4px;
-            animation: fadeIn 0.3s ease;
         }
         .theme-option {
             padding: 12px 8px;
@@ -369,8 +366,7 @@
             font-weight: 500;
             font-size: 14px;
             transition: 0.2s;
-            margin-top: 12px;
-            animation: fadeIn 0.5s ease;
+            margin-top: 4px;
         }
         .theme-dark-toggle:hover { border-color: var(--accent); background: var(--hover-bg); transform: scale(1.02); }
 
@@ -382,10 +378,6 @@
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
         }
         @keyframes slideInMsg {
             from { opacity: 0; transform: translateY(10px) scale(0.95); }
@@ -400,21 +392,6 @@
             50% { transform: scale(1.03); }
         }
 
-        /* ===== СВАЙП-ИНДИКАТОР ===== */
-        .swipe-indicator {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 40px;
-            background: var(--accent);
-            border-radius: 0 4px 4px 0;
-            opacity: 0.3;
-            pointer-events: none;
-            transition: 0.3s;
-        }
-
         /* АДАПТИВ */
         @media (max-width: 768px) {
             .sidebar { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
@@ -422,10 +399,8 @@
             .chat-area { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
             .chat-area.active { z-index: 3; }
             .back-btn { display: block !important; }
-            .settings-panel { width: 100%; left: -100%; }
+            .settings-panel { width: 100%; max-width: 100%; left: -100%; }
             .settings-panel.open { left: 0; }
-            .settings-panel.secondary { left: -200%; }
-            .settings-panel.secondary.open { left: -100%; }
             .auth-card { padding: 24px; }
             .menu-btn { bottom: 16px; right: 16px; width: 48px; height: 48px; font-size: 22px; }
             .menu-overlay { width: 280px; }
@@ -481,6 +456,9 @@
 <!-- ОСНОВНОЕ ПРИЛОЖЕНИЕ -->
 <div id="app" class="app hidden">
 
+    <!-- Затемнение -->
+    <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+
     <!-- САЙДБАР -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
@@ -493,7 +471,6 @@
         </div>
 
         <div class="chat-list" id="chatList"></div>
-        <div class="swipe-indicator"></div>
     </div>
 
     <!-- ЧАТ -->
@@ -513,14 +490,14 @@
         </div>
     </div>
 
-    <!-- ===== НАСТРОЙКИ (главное окно) ===== -->
+    <!-- ===== НАСТРОЙКИ (главная панель) ===== -->
     <div class="settings-panel" id="settingsPanel">
-        <div class="settings-header">
+        <div class="panel-header">
             <h3>Настройки</h3>
-            <button class="settings-close" onclick="closeSettings()">✕</button>
+            <button class="panel-close" onclick="closeSettings()">✕</button>
         </div>
-        <div class="settings-content">
-            <!-- Профиль по центру -->
+        <div class="panel-body">
+            <!-- Профиль -->
             <div class="settings-profile" onclick="openEditProfile()">
                 <div class="avatar" id="settingsAvatar">A</div>
                 <div class="name" id="settingsName">Мой профиль</div>
@@ -541,39 +518,14 @@
         </div>
     </div>
 
-    <!-- ===== НАСТРОЙКИ: АККАУНТ ===== -->
-    <div class="settings-panel secondary" id="settingsAccountPanel">
-        <div class="settings-header">
-            <button class="back" onclick="closeSettingsAccount()">‹</button>
-            <h3>Аккаунт</h3>
-            <button class="settings-close" onclick="closeAllSettings()">✕</button>
-        </div>
-        <div class="settings-content">
-            <div class="account-info">
-                <div class="row">
-                    <span class="label">Email / Телефон</span>
-                    <span class="value" id="accountEmail">—</span>
-                </div>
-                <div class="row">
-                    <span class="label">Имя пользователя</span>
-                    <span class="value" id="accountName">—</span>
-                </div>
-                <div class="row">
-                    <span class="label">Юзернейм</span>
-                    <span class="value" id="accountUsername">@username</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- ===== НАСТРОЙКИ: ТЕМА ОФОРМЛЕНИЯ ===== -->
-    <div class="settings-panel secondary" id="settingsThemePanel">
-        <div class="settings-header">
-            <button class="back" onclick="closeSettingsTheme()">‹</button>
+    <div class="settings-panel" id="settingsThemePanel">
+        <div class="panel-header">
+            <button class="panel-close" onclick="closeSettingsTheme()" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-secondary);padding:4px 8px;border-radius:8px;">‹</button>
             <h3>Тема оформления</h3>
-            <button class="settings-close" onclick="closeAllSettings()">✕</button>
+            <button class="panel-close" onclick="closeAllSettings()">✕</button>
         </div>
-        <div class="settings-content">
+        <div class="panel-body">
             <div class="theme-grid">
                 <div class="theme-option active" data-theme="blue" onclick="setTheme('blue')">
                     <div class="preview" style="background:#4f46e5;"></div>
@@ -601,6 +553,31 @@
                 </div>
             </div>
             <button class="theme-dark-toggle" onclick="toggleDarkMode()" id="darkToggleBtn">🌙 Сменить на тёмную тему</button>
+        </div>
+    </div>
+
+    <!-- ===== НАСТРОЙКИ: АККАУНТ ===== -->
+    <div class="settings-panel" id="settingsAccountPanel">
+        <div class="panel-header">
+            <button class="panel-close" onclick="closeSettingsAccount()" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-secondary);padding:4px 8px;border-radius:8px;">‹</button>
+            <h3>Аккаунт</h3>
+            <button class="panel-close" onclick="closeAllSettings()">✕</button>
+        </div>
+        <div class="panel-body">
+            <div class="account-info">
+                <div class="row">
+                    <span class="label">Email / Телефон</span>
+                    <span class="value" id="accountEmail">—</span>
+                </div>
+                <div class="row">
+                    <span class="label">Имя пользователя</span>
+                    <span class="value" id="accountName">—</span>
+                </div>
+                <div class="row">
+                    <span class="label">Юзернейм</span>
+                    <span class="value" id="accountUsername">@username</span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -994,61 +971,50 @@ document.addEventListener('DOMContentLoaded', async function() {
 });
 
 // ============================================================
-// СВАЙП (открытие настроек)
-// ============================================================
-
-let touchStartX = 0;
-let touchEndX = 0;
-
-document.getElementById('chatList').addEventListener('touchstart', function(e) {
-    touchStartX = e.changedTouches[0].screenX;
-}, { passive: true });
-
-document.getElementById('chatList').addEventListener('touchend', function(e) {
-    touchEndX = e.changedTouches[0].screenX;
-    const diff = touchStartX - touchEndX;
-    // Если свайп слева направо (отрицательная разница) и достаточно большой
-    if (diff < -80 && touchStartX < 60) {
-        openSettings();
-    }
-}, { passive: true });
-
-// ============================================================
-// НАСТРОЙКИ
+// НАСТРОЙКИ (УПРОЩЁННЫЕ, РАБОТАЮТ!)
 // ============================================================
 
 function openSettings() {
     document.getElementById('settingsPanel').classList.add('open');
+    document.getElementById('settingsOverlay').classList.add('open');
     updateSettingsProfile();
 }
 
 function closeSettings() {
     document.getElementById('settingsPanel').classList.remove('open');
-    closeSettingsAccount();
-    closeSettingsTheme();
+    document.getElementById('settingsOverlay').classList.remove('open');
 }
 
-function closeAllSettings() {
-    document.getElementById('settingsPanel').classList.remove('open');
-    document.getElementById('settingsAccountPanel').classList.remove('open');
+function openSettingsTheme() {
+    closeSettings();
+    document.getElementById('settingsThemePanel').classList.add('open');
+    document.getElementById('settingsOverlay').classList.add('open');
+}
+
+function closeSettingsTheme() {
     document.getElementById('settingsThemePanel').classList.remove('open');
+    document.getElementById('settingsOverlay').classList.remove('open');
+    openSettings();
 }
 
 function openSettingsAccount() {
+    closeSettings();
     document.getElementById('settingsAccountPanel').classList.add('open');
+    document.getElementById('settingsOverlay').classList.add('open');
     updateAccountInfo();
 }
 
 function closeSettingsAccount() {
     document.getElementById('settingsAccountPanel').classList.remove('open');
+    document.getElementById('settingsOverlay').classList.remove('open');
+    openSettings();
 }
 
-function openSettingsTheme() {
-    document.getElementById('settingsThemePanel').classList.add('open');
-}
-
-function closeSettingsTheme() {
+function closeAllSettings() {
+    document.getElementById('settingsPanel').classList.remove('open');
     document.getElementById('settingsThemePanel').classList.remove('open');
+    document.getElementById('settingsAccountPanel').classList.remove('open');
+    document.getElementById('settingsOverlay').classList.remove('open');
 }
 
 function updateSettingsProfile() {
@@ -1605,6 +1571,5 @@ window.addEventListener('resize', function() {
 console.log('💬 musezzy загружен!');
 console.log('🔥 Данные в Firebase!');
 </script>
-
 </body>
 </html>
