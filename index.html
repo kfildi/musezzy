@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>musezzy — мессенджер</title>
     <style>
         :root {
@@ -22,6 +22,10 @@
             --avatar-bg: linear-gradient(135deg, var(--accent), #8b5cf6);
             --chat-bg-image: none;
             --danger: #ef4444;
+            
+            /* Безопасные зоны для вырезов и кнопок телефона */
+            --sat: env(safe-area-inset-top, 0px);
+            --sab: env(safe-area-inset-bottom, 0px);
         }
 
         body.dark {
@@ -43,7 +47,7 @@
         body[data-theme="cyan"] { --accent: #06b6d4; --accent-light: #ecfeff; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        body { background: var(--bg); color: var(--text); height: 100vh; height: 100dvh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .hidden { display: none !important; }
 
         /* AUTH PAGE */
@@ -64,10 +68,21 @@
         .auth-btn:active { transform: scale(0.98); }
 
         /* MAIN APP */
-        .app { display: flex; width: 100%; height: 100vh; max-width: 1280px; background: var(--bg); overflow: hidden; position: relative; }
-        .sidebar { width: 400px; min-width: 340px; background: var(--bg); display: flex; flex-direction: column; height: 100vh; z-index: 2; padding: 16px 20px 80px 20px; position: relative; }
+        .app { display: flex; width: 100%; height: 100vh; height: 100dvh; max-width: 1280px; background: var(--bg); overflow: hidden; position: relative; }
         
-        .top-nav { display: flex; align-items: center; margin-bottom: 20px; position: relative; height: 48px; }
+        .sidebar { 
+            width: 400px; 
+            min-width: 340px; 
+            background: var(--bg); 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            z-index: 2; 
+            padding: calc(12px + var(--sat)) 20px calc(70px + var(--sab)) 20px; 
+            position: relative; 
+        }
+        
+        .top-nav { display: flex; align-items: center; margin-bottom: 16px; position: relative; height: 48px; }
         .search-box { flex: 1; display: flex; align-items: center; background: var(--card); border-radius: var(--radius-pill); padding: 12px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: all 0.2s ease; }
         .search-box input { border: none; outline: none; background: transparent; width: 100%; font-size: 15px; color: var(--text); }
 
@@ -98,13 +113,44 @@
         .chat-time { font-size: 12px; color: var(--text-secondary); }
         .chat-last-msg { font-size: 14px; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        .bottom-nav { position: absolute; bottom: 0; left: 0; width: 400px; height: 70px; background: var(--card); border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-around; z-index: 10; }
+        .bottom-nav { 
+            position: absolute; 
+            bottom: 0; 
+            left: 0; 
+            width: 400px; 
+            height: calc(60px + var(--sab)); 
+            padding-bottom: var(--sab); 
+            background: var(--card); 
+            border-top: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-around; 
+            z-index: 10; 
+        }
         .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-secondary); font-size: 11px; font-weight: 600; cursor: pointer; border: none; background: none; flex: 1; transition: color 0.2s; }
         .nav-item.active { color: var(--accent); }
         .nav-item .icon { font-size: 20px; }
 
-        .chat-area { flex: 1; display: flex; flex-direction: column; background: var(--card); height: 100vh; border-left: 1px solid var(--border); position: relative; }
-        .chat-header { padding: 16px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 14px; position: relative; min-height: 73px; }
+        .chat-area { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            background: var(--card); 
+            height: 100%; 
+            border-left: 1px solid var(--border); 
+            position: relative; 
+        }
+        
+        .chat-header { 
+            padding: calc(12px + var(--sat)) 24px 12px 24px; 
+            border-bottom: 1px solid var(--border); 
+            display: flex; 
+            align-items: center; 
+            gap: 14px; 
+            position: relative; 
+            min-height: calc(60px + var(--sat)); 
+        }
+        
         .chat-header .avatar { width: 44px; height: 44px; border-radius: 16px; background: var(--avatar-bg); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; overflow: hidden; }
         .chat-header-name { font-weight: 700; font-size: 17px; }
         .back-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text); display: none; }
@@ -141,7 +187,11 @@
         .reply-preview-bar { background: var(--card); border-top: 1px solid var(--border); padding: 8px 24px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; animation: slideUp 0.2s ease; }
         .reply-preview-bar .content { border-left: 3px solid var(--accent); padding-left: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; color: var(--text-secondary); }
 
-        .msg-input-container { padding: 16px 24px; background: var(--card); border-top: 1px solid var(--border); }
+        .msg-input-container { 
+            padding: 12px 24px calc(12px + var(--sab)) 24px; 
+            background: var(--card); 
+            border-top: 1px solid var(--border); 
+        }
         .msg-input { display: flex; align-items: center; gap: 10px; background: var(--bg); padding: 8px 16px; border-radius: var(--radius-pill); border: 1px solid var(--border); }
         .msg-input input { flex: 1; border: none; outline: none; background: transparent; font-size: 15px; color: var(--text); }
         .msg-input-btn { background: var(--accent); border: none; width: 38px; height: 38px; border-radius: 50%; color: white; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.15s ease; flex-shrink: 0; }
@@ -149,7 +199,7 @@
         .btn-attach { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-secondary); }
 
         /* TELEGRAM STYLE GALLERY MODAL */
-        .gallery-modal { position: fixed; bottom: 0; left: 0; width: 100%; height: 75vh; background: var(--card); border-top-left-radius: 28px; border-top-right-radius: 28px; z-index: 200; box-shadow: 0 -10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); padding: 20px; }
+        .gallery-modal { position: fixed; bottom: 0; left: 0; width: 100%; height: 75vh; background: var(--card); border-top-left-radius: 28px; border-top-right-radius: 28px; z-index: 200; box-shadow: 0 -10px 40px rgba(0,0,0,0.2); display: flex; flex-direction: column; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); padding: 20px 20px calc(20px + var(--sab)) 20px; }
         .gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; flex: 1; overflow-y: auto; padding-bottom: 20px; }
         .gallery-item { aspect-ratio: 1; border-radius: 16px; overflow: hidden; background: var(--bg); position: relative; cursor: pointer; border: 2px solid transparent; }
@@ -158,12 +208,38 @@
         .gallery-upload-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed var(--border); border-radius: 16px; color: var(--text-secondary); font-size: 24px; cursor: pointer; }
 
         /* SETTINGS & SUBPANELS */
-        .settings-panel { position: absolute; top: 0; left: -100%; width: 400px; height: 100%; background: var(--card); z-index: 30; transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1); padding: 24px; display: flex; flex-direction: column; overflow-y: auto; }
+        .settings-panel { 
+            position: absolute; 
+            top: 0; 
+            left: -100%; 
+            width: 400px; 
+            height: 100%; 
+            background: var(--card); 
+            z-index: 30; 
+            transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            padding: calc(20px + var(--sat)) 24px calc(20px + var(--sab)) 24px; 
+            display: flex; 
+            flex-direction: column; 
+            overflow-y: auto; 
+        }
         .settings-panel.open { left: 0; }
         .setting-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px; background: var(--bg); border: 1px solid var(--border); border-radius: 20px; color: var(--text); font-weight: 600; cursor: pointer; margin-bottom: 12px; font-size: 15px; transition: background 0.2s; }
         .setting-btn:active { background: var(--border); }
 
-        .subpanel { position: absolute; top: 0; left: 100%; width: 100%; height: 100%; background: var(--card); z-index: 35; transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1); padding: 24px; display: flex; flex-direction: column; overflow-y: auto; }
+        .subpanel { 
+            position: absolute; 
+            top: 0; 
+            left: 100%; 
+            width: 100%; 
+            height: 100%; 
+            background: var(--card); 
+            z-index: 35; 
+            transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1); 
+            padding: calc(20px + var(--sat)) 24px calc(20px + var(--sab)) 24px; 
+            display: flex; 
+            flex-direction: column; 
+            overflow-y: auto; 
+        }
         .subpanel.open { left: 0; }
 
         .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; margin-bottom: 20px; }
@@ -196,7 +272,7 @@
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         @media (max-width: 768px) {
-            .sidebar { width: 100%; min-width: 100%; padding-bottom: 80px; }
+            .sidebar { width: 100%; min-width: 100%; }
             .bottom-nav { width: 100%; }
             .chat-area { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 20; display: none; }
             .chat-area.active { display: flex; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -287,7 +363,7 @@
         </div>
 
         <!-- MESSAGE SELECTION TOP BAR -->
-        <div class="action-bar hidden" id="msgActionBar">
+        <div class="action-bar hidden" id="msgActionBar" style="padding-top: var(--sat);">
             <span id="msgActionTitle" style="font-weight:700;">Выбрано: 1</span>
             <div style="display:flex; gap:8px;">
                 <button class="action-bar-btn" id="btnReplySelectedMsg" onclick="replyToSelectedMsg()" title="Ответить">↩️</button>
@@ -473,9 +549,8 @@ let selectedChatId = null;
 let selectedMsgIds = [];
 let longPressTimer = null;
 let replyingMessage = null;
-let galleryTargetMode = 'wallpaper'; // 'wallpaper' or 'chat'
+let galleryTargetMode = 'wallpaper';
 
-// DEFAULT DEMO GALLERY IMAGES
 const defaultGallery = [
     'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=500',
     'https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=500',
@@ -782,7 +857,6 @@ function renderMessages(msgs) {
         const wrap = document.createElement('div');
         wrap.className = 'msg-wrap ' + (isMe ? 'out' : 'in') + (isSelected ? ' selected' : '');
         
-        // LONG PRESS FOR MESSAGES
         wrap.onpointerdown = () => {
             longPressTimer = setTimeout(() => {
                 toggleSelectMessage(m.id);
@@ -820,7 +894,6 @@ function renderMessages(msgs) {
     container.scrollTop = container.scrollHeight;
 }
 
-/* MESSAGE SELECTION & CONTEXT BAR */
 function toggleSelectMessage(msgId) {
     const idx = selectedMsgIds.indexOf(msgId);
     if (idx > -1) {
@@ -833,7 +906,6 @@ function toggleSelectMessage(msgId) {
         document.getElementById('msgActionBar').classList.remove('hidden');
         document.getElementById('msgActionTitle').textContent = `Выбрано: ${selectedMsgIds.length}`;
         
-        // Показываем кнопку reply только если выбрано ровно 1 сообщение
         if (selectedMsgIds.length === 1) {
             document.getElementById('btnReplySelectedMsg').classList.remove('hidden');
         } else {
@@ -876,7 +948,6 @@ async function deleteSelectedMessages() {
     for (const msgId of selectedMsgIds) {
         const msg = currentMessagesList.find(m => m.id === msgId);
         if (msg) {
-            // Удалить может либо автор сообщения, либо владелец группы
             if (msg.from === currentUser.id || isOwner) {
                 await db.collection('messages').doc(msgId).delete();
             }
@@ -918,9 +989,8 @@ async function sendMessage(imageData = null) {
     cancelReply();
 }
 
-/* TELEGRAM STYLE GALLERY LOGIC */
 function openGallery(mode) {
-    galleryTargetMode = mode; // 'wallpaper' or 'chat'
+    galleryTargetMode = mode;
     document.getElementById('galleryTitle').textContent = mode === 'wallpaper' ? 'Выбор обоев' : 'Галерея';
     document.getElementById('galleryOverlay').classList.remove('hidden');
     renderGalleryItems();
@@ -934,7 +1004,6 @@ function renderGalleryItems() {
     const grid = document.getElementById('galleryGrid');
     grid.innerHTML = '';
 
-    // Upload button as first item
     const uploadBtn = document.createElement('label');
     uploadBtn.className = 'gallery-item gallery-upload-btn';
     uploadBtn.innerHTML = `<span>➕</span><span style="font-size:11px;margin-top:4px;">Загрузить</span><input type="file" accept="image/*" style="display:none;" onchange="handleGalleryFileUpload(this)">`;
@@ -1006,7 +1075,6 @@ async function handleCreateGroup() {
     openChat(docRef.id);
 }
 
-/* PANELS & SUBPANELS */
 function openSettings() { document.getElementById('settingsPanel').classList.add('open'); }
 function closeSettings() { 
     document.getElementById('settingsPanel').classList.remove('open');
@@ -1015,7 +1083,6 @@ function closeSettings() {
 function openSubpanel(id) { document.getElementById(id).classList.add('open'); }
 function closeSubpanel(id) { document.getElementById(id).classList.remove('open'); }
 
-/* THEME SYSTEM */
 function toggleDarkMode() {
     document.body.classList.toggle('dark');
     const isDark = document.body.classList.contains('dark');
