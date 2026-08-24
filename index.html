@@ -426,6 +426,7 @@ let editingMsgId = null;
 async function getUsers() {
     try {
         const snapshot = await db.collection('users').get();
+        usersCache = {};
         snapshot.forEach(doc => {
             const u = { id: doc.id, ...doc.data() };
             usersCache[u.id] = u;
@@ -557,32 +558,56 @@ function switchTab(tab) {
 
 async function handleRegister() {
     const name = document.getElementById('regName').value.trim();
-    const username = document.getElementById('regUsername').value.trim().toLowerCase();
+    const username = document.getElementById('regUsername').value.trim().toLowerCase().replace('@', '');
     const email = document.getElementById('regEmail').value.trim().toLowerCase();
     const password = document.getElementById('regPassword').value;
     const errorEl = document.getElementById('registerError');
+    errorEl.textContent = '';
 
-    if (!name || !username || !email || password.length < 6) return errorEl.textContent = 'Заполните все поля правильно';
+    if (!name || !username || !email || password.length < 6) {
+        return errorEl.textContent = 'Заполните все поля правильно (пароль от 6 символов)';
+    }
 
     const users = await getUsers();
-    if (users.some(u => u.email === email)) return errorEl.textContent = 'Email/телефон занят';
-    if (users.some(u => u.username === username)) return errorEl.textContent = 'Юзернейм занят';
+    
+    if (users.some(u => u.username && u.username.toLowerCase() === username)) {
+        return errorEl.textContent = 'Имя пользователя (username) уже занято';
+    }
+
+    if (users.some(u => u.email && u.email.toLowerCase() === email)) {
+        return errorEl.textContent = 'Email или номер телефона уже занят';
+    }
 
     try {
-        await createUserInDb({ name, username, email, password, avatar: null, created: new Date().toISOString() });
-        switchTab('login');
-    } catch (e) { errorEl.textContent = 'Ошибка регистрации'; }
+        const newUser = await createUserInDb({ 
+            name, 
+            username, 
+            email, 
+            password, 
+            avatar: null, 
+            created: new Date().toISOString() 
+        });
+        currentUser = newUser;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(newUser));
+        showApp();
+    } catch (e) { 
+        errorEl.textContent = 'Ошибка при создании аккаунта'; 
+    }
 }
 
 async function handleLogin() {
     const email = document.getElementById('loginEmail').value.trim().toLowerCase();
     const password = document.getElementById('loginPassword').value;
     const errorEl = document.getElementById('loginError');
+    errorEl.textContent = '';
 
     const users = await getUsers();
-    const user = users.find(u => (u.email === email || u.username === email) && u.password === password);
+    const user = users.find(u => 
+        ( (u.email && u.email.toLowerCase() === email) || (u.username && u.username.toLowerCase() === email.replace('@', '')) ) && 
+        u.password === password
+    );
 
-    if (!user) return errorEl.textContent = 'Неверные данные';
+    if (!user) return errorEl.textContent = 'Неверный логин или пароль';
 
     currentUser = user;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
@@ -710,7 +735,7 @@ async function handleSearch() {
     const allUsers = Object.values(usersCache);
     const matchingUsers = allUsers.filter(u => 
         u.id !== currentUser.id && 
-        (u.username.toLowerCase().includes(query) || u.name.toLowerCase().includes(query))
+        (u.username && u.username.toLowerCase().includes(query) || u.name && u.name.toLowerCase().includes(query))
     );
 
     const searchResults = matchingUsers.map(u => ({
@@ -1147,7 +1172,7 @@ function previewAvatar(input) {
 
 async function saveProfile() {
     const name = document.getElementById('editName').value.trim();
-    const username = document.getElementById('editUsername').value.trim().toLowerCase();
+    const username = document.getElementById('editUsername').value.trim().toLowerCase().replace('@', '');
     const avatarFile = document.getElementById('editAvatarFile').files[0];
 
     if (!name || !username) return alert('Проверьте введенные данные');
