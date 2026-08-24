@@ -22,8 +22,8 @@
             --avatar-bg: linear-gradient(135deg, var(--accent), #8b5cf6);
             --chat-bg-image: none;
             --danger: #ef4444;
+            --star-color: #ffaa00;
             
-            /* Безопасные зоны для вырезов и кнопок телефона */
             --sat: env(safe-area-inset-top, 0px);
             --sab: env(safe-area-inset-bottom, 0px);
         }
@@ -86,7 +86,6 @@
         .search-box { flex: 1; display: flex; align-items: center; background: var(--card); border-radius: var(--radius-pill); padding: 12px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); transition: all 0.2s ease; }
         .search-box input { border: none; outline: none; background: transparent; width: 100%; font-size: 15px; color: var(--text); }
 
-        /* CONTEXTUAL ACTION BAR FOR SELECTION */
         .action-bar { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--card); border-radius: var(--radius-pill); padding: 0 20px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); box-shadow: var(--shadow-sm); z-index: 5; animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
         .action-bar-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--danger); padding: 8px; border-radius: 50%; transition: background 0.2s; }
         .action-bar-btn:active { background: rgba(239, 68, 68, 0.1); }
@@ -250,9 +249,61 @@
         .avatar-upload img { width: 100%; height: 100%; object-fit: cover; }
         .avatar-upload::after { content: '📷'; position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.4); text-align: center; font-size: 14px; padding: 2px 0; }
 
+        .profile-gift-badge {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+            z-index: 2;
+        }
+
         .info-group { background: var(--bg); border-radius: 18px; padding: 14px 18px; margin-bottom: 12px; border: 1px solid var(--border); }
         .info-label { font-size: 11px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
         .info-val { font-size: 15px; font-weight: 600; }
+
+        /* MY GIFTS DISPLAY IN ACCOUNT */
+        .acc-gift-preview {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 4px;
+        }
+        .acc-gift-preview img {
+            width: 44px;
+            height: 44px;
+            object-fit: contain;
+            mix-blend-mode: screen;
+        }
+
+        /* STARS & GIFTS STYLES */
+        .stars-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .stars-amount { font-size: 36px; font-weight: 800; color: var(--text); }
+        .gifts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 12px; }
+        .gift-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .gift-card:active { transform: scale(0.96); }
+        .gift-card img { width: 80px; height: 80px; object-fit: contain; margin-bottom: 8px; mix-blend-mode: screen; }
+        .gift-name { font-size: 12px; font-weight: 600; text-align: center; color: var(--text); margin-bottom: 6px; }
+        .gift-price { font-size: 13px; font-weight: 700; color: var(--star-color); }
 
         /* MODALS & ACTION MENUS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(4px); animation: fadeIn 0.2s ease; }
@@ -268,8 +319,8 @@
         /* ANIMATIONS */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes popIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
-        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 768px) {
             .sidebar { width: 100%; min-width: 100%; }
@@ -323,7 +374,6 @@
                 <input type="text" placeholder="Поиск по чатам" id="searchInput" onkeyup="handleSearch()">
             </div>
             
-            <!-- CHAT SELECTION BAR -->
             <div class="action-bar hidden" id="actionBar">
                 <span id="actionTitle" style="font-weight:700;">Выбран чат</span>
                 <div style="display:flex; gap:8px;">
@@ -353,7 +403,6 @@
     </div>
 
     <div class="chat-area" id="chatArea">
-        <!-- NORMAL CHAT HEADER -->
         <div class="chat-header" id="chatHeaderNormal">
             <button class="back-btn" onclick="closeChat()">←</button>
             <div class="avatar" id="chatAvatar">💬</div>
@@ -362,7 +411,6 @@
             </div>
         </div>
 
-        <!-- MESSAGE SELECTION TOP BAR -->
         <div class="action-bar hidden" id="msgActionBar" style="padding-top: var(--sat);">
             <span id="msgActionTitle" style="font-weight:700;">Выбрано: 1</span>
             <div style="display:flex; gap:8px;">
@@ -398,6 +446,7 @@
         <div style="text-align:center; margin-bottom:28px;">
             <div class="avatar-upload" onclick="document.getElementById('avatarFileInput').click()">
                 <div id="settingsAvatarContainer">U</div>
+                <img id="profileGiftBadge" class="profile-gift-badge" src="" style="display:none;">
             </div>
             <input type="file" id="avatarFileInput" style="display:none;" accept="image/*" onchange="uploadAvatar(this)">
             <h3 id="settingsName">Имя</h3>
@@ -406,6 +455,16 @@
 
         <button class="setting-btn" onclick="openSubpanel('subpanelAccount')">
             <span>👤 Аккаунт</span>
+            <span>❯</span>
+        </button>
+
+        <button class="setting-btn" onclick="openSubpanel('subpanelStars')">
+            <span>⭐ Звезды</span>
+            <span>❯</span>
+        </button>
+
+        <button class="setting-btn" onclick="openSubpanel('subpanelGifts')">
+            <span>🎁 Подарки</span>
             <span>❯</span>
         </button>
 
@@ -438,7 +497,63 @@
                 <div class="info-val" id="accEmail">email@example.com</div>
             </div>
 
+            <div class="info-group">
+                <div class="info-label">Мои Подарки</div>
+                <div class="info-val" id="accGifts">
+                    <span style="color:var(--text-secondary); font-weight:normal; font-size:14px;">Подарков пока нет</span>
+                </div>
+            </div>
+
             <button onclick="openEditProfileModal()" class="btn-primary" style="padding:14px; border-radius:var(--radius-pill); border:none; margin-top:12px;">Изменить профиль</button>
+        </div>
+
+        <!-- SUBPANEL: STARS -->
+        <div class="subpanel" id="subpanelStars">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+                <button onclick="closeSubpanel('subpanelStars')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text);">←</button>
+                <h2>Звезды</h2>
+            </div>
+            <div class="stars-card">
+                <div style="font-size:48px; margin-bottom:10px;">⭐</div>
+                <div class="stars-amount" id="userStarsCount">0</div>
+                <div style="color:var(--text-secondary); font-size:14px; margin-top:4px;">Telegram Stars</div>
+            </div>
+        </div>
+
+        <!-- SUBPANEL: GIFTS -->
+        <div class="subpanel" id="subpanelGifts">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+                <button onclick="closeSubpanel('subpanelGifts')" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text);">←</button>
+                <h2>Подарки</h2>
+            </div>
+            <div class="info-label">Выберите сигарету</div>
+            <div class="gifts-grid">
+                <div class="gift-card" onclick="buyGift('1000027978.png', 10)">
+                    <img src="1000027978.png" alt="Пурпур">
+                    <div class="gift-name">Кибер-сигарета (Пурпур)</div>
+                    <div class="gift-price">⭐ 10</div>
+                </div>
+                <div class="gift-card" onclick="buyGift('1000027977.png', 10)">
+                    <img src="1000027977.png" alt="Рубин">
+                    <div class="gift-name">Кибер-сигарета (Рубин)</div>
+                    <div class="gift-price">⭐ 10</div>
+                </div>
+                <div class="gift-card" onclick="buyGift('1000027979.png', 10)">
+                    <img src="1000027979.png" alt="Изумруд">
+                    <div class="gift-name">Кибер-сигарета (Изумруд)</div>
+                    <div class="gift-price">⭐ 10</div>
+                </div>
+                <div class="gift-card" onclick="buyGift('1000027975.png', 10)">
+                    <img src="1000027975.png" alt="Неон">
+                    <div class="gift-name">Кибер-сигарета (Неон)</div>
+                    <div class="gift-price">⭐ 10</div>
+                </div>
+                <div class="gift-card" onclick="buyGift('1000027976.png', 10)">
+                    <img src="1000027976.png" alt="Сталь">
+                    <div class="gift-name">Кибер-сигарета (Сталь)</div>
+                    <div class="gift-price">⭐ 10</div>
+                </div>
+            </div>
         </div>
 
         <!-- SUBPANEL: THEME -->
@@ -480,7 +595,6 @@
     </div>
 </div>
 
-<!-- TELEGRAM STYLE GALLERY MODAL -->
 <div class="modal-overlay hidden" id="galleryOverlay">
     <div class="gallery-modal">
         <div class="gallery-header">
@@ -491,7 +605,6 @@
     </div>
 </div>
 
-<!-- MODALS -->
 <div class="modal-overlay hidden" id="modalEditProfile">
     <div class="modal">
         <h3>Редактирование</h3>
@@ -543,6 +656,7 @@ let chats = [];
 let activeChatId = null;
 let usersCache = {};
 let messagesUnsubscribe = null;
+let userUnsubscribe = null;
 let currentMessagesList = [];
 
 let selectedChatId = null;
@@ -604,8 +718,16 @@ async function handleRegister() {
     const password = document.getElementById('regPassword').value;
     if (!name || !username || password.length < 6) return alert('Заполните все поля');
     
-    const docRef = await db.collection('users').add({ name, username, email, password, avatar: null });
-    currentUser = { id: docRef.id, name, username, email, avatar: null };
+    const docRef = await db.collection('users').add({ 
+        name, 
+        username, 
+        email, 
+        password, 
+        avatar: null,
+        stars: 0,
+        gift: ""
+    });
+    currentUser = { id: docRef.id, name, username, email, avatar: null, stars: 0, gift: "" };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
     showApp();
 }
@@ -613,10 +735,21 @@ async function handleRegister() {
 function showApp() {
     document.getElementById('authPage').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
+
+    if (userUnsubscribe) userUnsubscribe();
+    userUnsubscribe = db.collection('users').doc(currentUser.id).onSnapshot(doc => {
+        if (doc.exists) {
+            currentUser = { id: doc.id, ...doc.data() };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
+            updateProfileUI();
+        }
+    });
+
     initApp();
 }
 
 function logout() {
+    if (userUnsubscribe) userUnsubscribe();
     localStorage.removeItem(STORAGE_KEY);
     location.reload();
 }
@@ -648,12 +781,14 @@ async function initApp() {
 }
 
 function updateProfileUI() {
-    document.getElementById('settingsName').textContent = currentUser.name;
-    document.getElementById('settingsUsername').textContent = '@' + currentUser.username;
+    document.getElementById('settingsName').textContent = currentUser.name || '';
+    document.getElementById('settingsUsername').textContent = '@' + (currentUser.username || '');
     
-    document.getElementById('accName').textContent = currentUser.name;
-    document.getElementById('accUsername').textContent = '@' + currentUser.username;
+    document.getElementById('accName').textContent = currentUser.name || 'Не указано';
+    document.getElementById('accUsername').textContent = '@' + (currentUser.username || '');
     document.getElementById('accEmail').textContent = currentUser.email || 'Не указан';
+    
+    document.getElementById('userStarsCount').textContent = currentUser.stars || 0;
 
     const avatarBox = document.getElementById('settingsAvatarContainer');
     if (currentUser.avatar) {
@@ -661,6 +796,46 @@ function updateProfileUI() {
     } else {
         avatarBox.textContent = currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U';
     }
+
+    const badge = document.getElementById('profileGiftBadge');
+    const accGiftsBox = document.getElementById('accGifts');
+
+    if (currentUser.gift) {
+        badge.src = currentUser.gift;
+        badge.style.display = 'block';
+        
+        accGiftsBox.innerHTML = `
+            <div class="acc-gift-preview">
+                <img src="${currentUser.gift}" alt="Gift">
+                <span>Кибер-сигарета</span>
+            </div>
+        `;
+    } else {
+        badge.style.display = 'none';
+        accGiftsBox.innerHTML = '<span style="color:var(--text-secondary); font-weight:normal; font-size:14px;">Подарков пока нет</span>';
+    }
+}
+
+async function buyGift(imageFile, price) {
+    if (!currentUser) return;
+    const currentStars = currentUser.stars || 0;
+    if (currentStars < price) {
+        alert('Недостаточно звезд для покупки!');
+        return;
+    }
+
+    const newStars = currentStars - price;
+    currentUser.stars = newStars;
+    currentUser.gift = imageFile;
+
+    await db.collection('users').doc(currentUser.id).update({
+        stars: newStars,
+        gift: imageFile
+    });
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
+    updateProfileUI();
+    alert('Подарок успешно куплен и прикреплен к аватарке!');
 }
 
 async function uploadAvatar(input) {
