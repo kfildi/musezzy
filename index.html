@@ -800,7 +800,6 @@ function listenChatRealtime(chatId) {
 
     messagesUnsubscribe = db.collection('messages')
         .where('groupId', '==', chatId)
-        .orderBy('timestamp', 'asc')
         .onSnapshot(snapshot => {
             const msgs = [];
             snapshot.forEach(doc => {
@@ -814,10 +813,18 @@ function listenChatRealtime(chatId) {
                 }
             });
 
+            msgs.sort((a, b) => {
+                const tA = a.timestamp ? (a.timestamp.seconds || 0) : Date.now() / 1000;
+                const tB = b.timestamp ? (b.timestamp.seconds || 0) : Date.now() / 1000;
+                return tA - tB;
+            });
+
             const chat = chats.find(c => c.id === chatId);
             if (chat) chat.messages = msgs;
 
             renderMessages(chatId);
+        }, err => {
+            console.error('Ошибка получения сообщений:', err);
         });
 
     statusUnsubscribe = db.collection('groups').doc(chatId).onSnapshot(doc => {
