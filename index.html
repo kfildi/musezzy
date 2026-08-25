@@ -264,18 +264,42 @@
         .info-label { font-size: 11px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
         .info-val { font-size: 15px; font-weight: 600; }
 
-        /* MY GIFTS DISPLAY IN ACCOUNT */
-        .acc-gift-preview {
-            display: flex;
-            align-items: center;
+        /* Квадратные карточки купленных подарков в Аккаунте */
+        .acc-gifts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
             gap: 12px;
-            margin-top: 4px;
+            margin-top: 12px;
         }
-        .acc-gift-preview img {
-            width: 44px;
-            height: 44px;
+
+        .acc-gift-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 10px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1 / 1;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .acc-gift-card img {
+            width: 48px;
+            height: 48px;
             object-fit: contain;
+            margin-bottom: 6px;
             mix-blend-mode: screen;
+        }
+
+        .acc-gift-card .acc-gift-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.2;
+            word-break: break-word;
         }
 
         /* STARS & GIFTS STYLES */
@@ -385,7 +409,10 @@
 
         <div class="section-header">
             <h1 class="section-title">Чаты</h1>
-            <button class="btn-add-chat" onclick="openCreateGroupModal()">+</button>
+            <div style="display:flex; gap:8px;">
+                <button class="btn-add-chat" onclick="openCreateDirectModal()" title="Личный чат">👤</button>
+                <button class="btn-add-chat" onclick="openCreateGroupModal()" title="Новая группа">+</button>
+            </div>
         </div>
 
         <div class="chat-list" id="chatList"></div>
@@ -497,14 +524,16 @@
                 <div class="info-val" id="accEmail">email@example.com</div>
             </div>
 
+            <!-- Кнопка изменения профиля -->
+            <button onclick="openEditProfileModal()" class="btn-primary" style="padding:14px; border-radius:var(--radius-pill); border:none; margin-top:4px; margin-bottom:20px;">Изменить профиль</button>
+
+            <!-- Подарки размещены ПОД кнопкой -->
             <div class="info-group">
                 <div class="info-label">Мои Подарки</div>
-                <div class="info-val" id="accGifts">
+                <div id="accGifts">
                     <span style="color:var(--text-secondary); font-weight:normal; font-size:14px;">Подарков пока нет</span>
                 </div>
             </div>
-
-            <button onclick="openEditProfileModal()" class="btn-primary" style="padding:14px; border-radius:var(--radius-pill); border:none; margin-top:12px;">Изменить профиль</button>
         </div>
 
         <!-- SUBPANEL: STARS -->
@@ -630,6 +659,17 @@
     </div>
 </div>
 
+<div class="modal-overlay hidden" id="modalCreateDirect">
+    <div class="modal">
+        <h3>Личный чат</h3>
+        <input type="text" id="directUsername" placeholder="Юзернейм собеседника">
+        <div class="modal-actions">
+            <button class="btn-secondary" onclick="closeModal('modalCreateDirect')">Отмена</button>
+            <button class="btn-primary" onclick="handleCreateDirect()">Начать чат</button>
+        </div>
+    </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
@@ -651,12 +691,21 @@ const WALLPAPER_KEY = 'musezzy_wallpaper';
 const THEME_KEY = 'musezzy_theme';
 const GALLERY_STORAGE_KEY = 'musezzy_local_gallery';
 
+const GIFT_NAMES = {
+    '1000027978.png': 'Кибер-сигарета (Пурпур)',
+    '1000027977.png': 'Кибер-сигарета (Рубин)',
+    '1000027979.png': 'Кибер-сигарета (Изумруд)',
+    '1000027975.png': 'Кибер-сигарета (Неон)',
+    '1000027976.png': 'Кибер-сигарета (Сталь)'
+};
+
 let currentUser = null;
 let chats = [];
 let activeChatId = null;
 let usersCache = {};
 let messagesUnsubscribe = null;
 let userUnsubscribe = null;
+let chatsUnsubscribe = null;
 let currentMessagesList = [];
 
 let selectedChatId = null;
@@ -681,15 +730,6 @@ async function getUsers() {
             usersCache[u.id] = u;
         });
         return Object.values(usersCache);
-    } catch (e) { return []; }
-}
-
-async function getGroups() {
-    try {
-        const snapshot = await db.collection('groups').get();
-        const groups = [];
-        snapshot.forEach(doc => groups.push({ id: doc.id, ...doc.data() }));
-        return groups;
     } catch (e) { return []; }
 }
 
@@ -750,6 +790,8 @@ function showApp() {
 
 function logout() {
     if (userUnsubscribe) userUnsubscribe();
+    if (messagesUnsubscribe) messagesUnsubscribe();
+    if (chatsUnsubscribe) chatsUnsubscribe();
     localStorage.removeItem(STORAGE_KEY);
     location.reload();
 }
@@ -775,8 +817,7 @@ function loadSavedSettings() {
 
 async function initApp() {
     await getUsers();
-    await loadChats();
-    renderChatList();
+    listenChats();
     updateProfileUI();
 }
 
@@ -804,10 +845,14 @@ function updateProfileUI() {
         badge.src = currentUser.gift;
         badge.style.display = 'block';
         
+        const giftTitle = GIFT_NAMES[currentUser.gift] || 'Кибер-сигарета';
+
         accGiftsBox.innerHTML = `
-            <div class="acc-gift-preview">
-                <img src="${currentUser.gift}" alt="Gift">
-                <span>Кибер-сигарета</span>
+            <div class="acc-gifts-grid">
+                <div class="acc-gift-card">
+                    <img src="${currentUser.gift}" alt="${giftTitle}">
+                    <div class="acc-gift-title">${giftTitle}</div>
+                </div>
             </div>
         `;
     } else {
@@ -835,7 +880,7 @@ async function buyGift(imageFile, price) {
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUser));
     updateProfileUI();
-    alert('Подарок успешно куплен и прикреплен к аватарке!');
+    alert('Подарок успешно куплен!');
 }
 
 async function uploadAvatar(input) {
@@ -862,11 +907,16 @@ function removeWallpaper() {
     document.documentElement.style.setProperty('--chat-bg-image', 'none');
 }
 
-async function loadChats() {
-    const groups = await getGroups();
-    if (groups && currentUser) {
-        chats = groups.filter(g => g.members && g.members.includes(currentUser.id));
-    }
+function listenChats() {
+    if (chatsUnsubscribe) chatsUnsubscribe();
+    chatsUnsubscribe = db.collection('groups')
+        .where('members', 'array-contains', currentUser.id)
+        .onSnapshot(snapshot => {
+            const list = [];
+            snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+            chats = list;
+            renderChatList();
+        });
 }
 
 function getChatDetails(chat) {
@@ -968,8 +1018,6 @@ async function deleteSelectedChat() {
         await db.collection('groups').doc(selectedChatId).delete();
         if (activeChatId === selectedChatId) closeChat();
         clearSelection();
-        await loadChats();
-        renderChatList();
     }
 }
 
@@ -990,6 +1038,8 @@ function openChat(chatId) {
     activeChatId = chatId;
     clearMsgSelection();
     const chat = chats.find(c => c.id === chatId);
+    if (!chat) return;
+
     const details = getChatDetails(chat);
 
     document.getElementById('chatTitle').textContent = details.name;
@@ -1223,6 +1273,7 @@ function selectGalleryImage(src) {
 }
 
 function openCreateGroupModal() { document.getElementById('modalCreateGroup').classList.remove('hidden'); }
+function openCreateDirectModal() { document.getElementById('modalCreateDirect').classList.remove('hidden'); }
 function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
 async function handleCreateGroup() {
@@ -1246,7 +1297,36 @@ async function handleCreateGroup() {
     document.getElementById('groupName').value = '';
     document.getElementById('groupUsername').value = '';
     
-    await loadChats();
+    openChat(docRef.id);
+}
+
+async function handleCreateDirect() {
+    const targetUsername = document.getElementById('directUsername').value.trim().toLowerCase();
+    if (!targetUsername) return;
+
+    const users = await getUsers();
+    const targetUser = users.find(u => u.username && u.username.toLowerCase() === targetUsername);
+
+    if (!targetUser) return alert('Пользователь не найден!');
+    if (targetUser.id === currentUser.id) return alert('Нельзя создать чат с самим собой');
+
+    const existingChat = chats.find(c => c.type === 'private' && c.members.includes(targetUser.id));
+    if (existingChat) {
+        closeModal('modalCreateDirect');
+        openChat(existingChat.id);
+        return;
+    }
+
+    const docRef = await db.collection('groups').add({
+        name: targetUser.name,
+        type: 'private',
+        createdBy: currentUser.id,
+        members: [currentUser.id, targetUser.id],
+        lastMessage: 'Чат создан'
+    });
+
+    closeModal('modalCreateDirect');
+    document.getElementById('directUsername').value = '';
     openChat(docRef.id);
 }
 
